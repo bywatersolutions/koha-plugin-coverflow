@@ -114,7 +114,7 @@ sub configure {
                 print $template->output();
             }
             else {
-                update_opacuserjs($mapping);
+                $self->update_opacuserjs($mapping);
                 $self->go_home();
             }
         }
@@ -239,49 +239,17 @@ sub get_report {
 }
 
 sub update_opacuserjs {
-    my ($mapping) = @_;
+    my ($self, $mapping) = @_;
 
     my $opacuserjs = C4::Context->preference('opacuserjs');
     $opacuserjs =~ s/\n\/\* JS for Koha CoverFlow Plugin.*End of JS for Koha CoverFlow Plugin \*\///gs;
 
-    my $coverflow_js;
-    $coverflow_js .= q|
-        $(document).ready(function () {
-            $.getScript("/plugin/Koha/Plugin/Com/ByWaterSolutions/CoverFlow/jquery.coverscroll.js", function (data, textStatus, jqxhr) {
-    |;
+    my $template = $self->get_template( { file => 'opacuserjs.tt' } );
+    $template->param( 'mapping' => $mapping );
 
-    foreach my $instance ( @$mapping ) {
-        my $report_id = $instance->{id};
-        my $jquery_selector = $instance->{selector};
+    my $coverflow_js = $template->output();
 
-        $coverflow_js .= qq|
-            \$('$jquery_selector').load("/coverflow.pl?id=$report_id", function () {
-                var opt = {
-                    'items': '.item',
-                    'minfactor': 15, // how much is the next item smaller than previous in pixels
-                    'distribution': 1.5, // how apart are the items (items become separated when this value is below 1)
-                    'scalethreshold': 0, // after how many items to start scaling
-                    'staticbelowthreshold': false, // if true when number of items is below "scalethreshold" - don't animate 
-                    'titleclass': 'itemTitle', // class name of the element containing the item title
-                    'selectedclass': 'selectedItem', // class name of the selected item
-                    'scrollactive': true, // scroll functionality switch
-                    'step': { // compressed items on the side are steps
-                        'limit': 4, // how many steps should be shown on each side
-                        'width': 10, // how wide is the visible section of the step in pixels
-                        'scale': true // scale down steps
-                    }
-                };
-                \$('$jquery_selector').coverscroll(opt);
-            });
-        |;
-    }
-
-    $coverflow_js .= qq|
-            });
-        });
-    |;
-
-    $coverflow_js = minify( input => $coverflow_js );
+    #$coverflow_js = minify( input => $coverflow_js );
 
     $coverflow_js = qq|\n/* JS for Koha CoverFlow Plugin 
    This JS was added automatically by installing the CoverFlow plugin
