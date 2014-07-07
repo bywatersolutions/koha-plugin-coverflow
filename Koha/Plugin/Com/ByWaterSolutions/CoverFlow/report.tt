@@ -1,10 +1,12 @@
-<div class="coverflow">
+<div class="coverTest">
+    <ul>
     [% FOREACH d IN data %]
         [% IF d.isbn %]
-            <div class="item">
+            <li>
                 <img src="http://images.amazon.com/images/P/[% d.isbn %].01.TZZZZZZZ.jpg" />
-                <div class="itemTitle"><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% d.biblionumber %]">[% d.title %]</a></div>
-            </div>
+		<a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% d.biblionumber %]">[% d.title %]</a>
+            </li>
         [% END %]
     [% END %]
+    </ul>
 </div>

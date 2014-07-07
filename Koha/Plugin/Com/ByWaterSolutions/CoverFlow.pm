@@ -249,7 +249,7 @@ sub update_opacuserjs {
 
     my $coverflow_js = $template->output();
 
-    #$coverflow_js = minify( input => $coverflow_js );
+    $coverflow_js = minify( input => $coverflow_js );
 
     $coverflow_js = qq|\n/* JS for Koha CoverFlow Plugin 
    This JS was added automatically by installing the CoverFlow plugin
