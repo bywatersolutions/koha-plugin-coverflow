@@ -2,7 +2,7 @@
     [% FOREACH d IN data %]
         [% IF d.isbn %]
             <div class="item">
-                <img src="http://images.amazon.com/images/P/[% d.isbn %].01.TZZZZZZZ.jpg" />
+                <img src="http://images.amazon.com/images/P/[% d.isbn %].01.LZZZZZZZ.jpg" />
                 <div class="itemTitle"><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% d.biblionumber %]">[% d.title %]</a></div>
             </div>
         [% END %]
