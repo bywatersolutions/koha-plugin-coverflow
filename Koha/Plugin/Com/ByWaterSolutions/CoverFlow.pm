@@ -198,8 +198,8 @@ sub get_report {
 
     my @sql_params = $sql_params ? @$sql_params : ();
 
-    my $cache        = Koha::Cache->get_instance();
-    my $cache_active = $cache->is_cache_active;
+    my $cache;#        = Koha::Cache->get_instance();
+    my $cache_active;# = $cache->is_cache_active;
     my ( $cache_key, $json_text );
     if ($cache_active) {
         $cache_key =

@@ -3,6 +3,11 @@ $(document).ready(function () {
 		$("head").append("<link id='flipster-css' href='/plugin/Koha/Plugin/Com/ByWaterSolutions/CoverFlow/jquery-flipster/src/css/jquery.flipster.min.css' type='text/css' rel='stylesheet' />");
 		[% FOREACH m IN mapping %]
 			$('[% m.selector %]').load("/coverflow.pl?id=[% m.id %]", function () {
+			        $('.coverTest img').on("load", function(){
+					if ( this.naturalHeight == 1 ) {
+						$(this).attr("src", "http://i.imgur.com/9u7lB1P.gif");
+                                        }
+			        });
 				var opt = {
 					'items': '.item',
 					'minfactor': 15, // how much is the next item smaller than previous in pixels
