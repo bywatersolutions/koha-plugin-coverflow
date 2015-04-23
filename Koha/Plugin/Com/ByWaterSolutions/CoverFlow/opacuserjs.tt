@@ -5,7 +5,7 @@ $(document).ready(function () {
 			$('[% m.selector %]').load("/coverflow.pl?id=[% m.id %]", function () {
 			        $('.coverTest img').on("load", function(){
 					if ( this.naturalHeight == 1 ) {
-						$(this).attr("src", "http://i.imgur.com/9u7lB1P.gif");
+						$(this).attr("src", "http://media.bywatersolutions.com/Model/NoImage.png");
                                         }
 			        });
 				var opt = {
