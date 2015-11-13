@@ -6,8 +6,8 @@ The plugin system needs to be turned on by a system administrator.
 
 To set up the Koha plugin system you must first make some changes to your install.
 
-* Change <enable_plugins>0</enable_plugins> to <enable_plugins>1</enable_plugins> in your koha-conf.xml file
-* Confirm that the path to <pluginsdir> exists, is correct, and is writable by the web server
+* Change `<enable_plugins>0<enable_plugins>` to `<enable_plugins>1</enable_plugins>` in your koha-conf.xml file
+* Confirm that the path to `<pluginsdir>` exists, is correct, and is writable by the web server
 * Restart your webserver
 
 Once set up is complete you will need to alter your UseKohaPlugins system preference. On the Tools page you will see the Tools Plugins and on the Reports page you will see the Reports Plugins.
