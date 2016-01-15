@@ -68,7 +68,13 @@ sub report {
 
     $template->param( 'data' => $data );
 
-    print $cgi->header();
+    print $cgi->header(
+        {
+            -type     => 'text/html',
+            -charset  => 'UTF-8',
+            -encoding => "UTF-8"
+        }
+    );
     print $template->output();
 }
 
@@ -86,7 +92,13 @@ sub configure {
         ## Grab the values we already have for our settings, if any exist
         $template->param( mapping => $self->retrieve_data('mapping'), );
 
-        print $cgi->header();
+        print $cgi->header(
+            {
+                -type     => 'text/html',
+                -charset  => 'UTF-8',
+                -encoding => "UTF-8"
+            }
+        );
         print $template->output();
     }
     else {
@@ -110,7 +122,13 @@ sub configure {
                     error   => $error,
                     mapping => $self->retrieve_data('mapping'),
                 );
-                print $cgi->header();
+                print $cgi->header(
+                    {
+                        -type     => 'text/html',
+                        -charset  => 'UTF-8',
+                        -encoding => "UTF-8"
+                    }
+                );
                 print $template->output();
             }
             else {
@@ -223,7 +241,7 @@ sub get_report {
             my $lines;
             $lines = $sth->fetchall_arrayref( {} );
             map { $_->{isbn} = GetNormalizedISBN( $_->{isbn} ) } @$lines;
-            $json_text = encode_json($lines);
+            $json_text = to_json($lines);
 
             if ($cache_active) {
                 $cache->set_in_cache( $cache_key, $json_text,
@@ -231,7 +249,7 @@ sub get_report {
             }
         }
         else {
-            $json_text = encode_json($errors);
+            $json_text = to_json($errors);
         }
     }
 
