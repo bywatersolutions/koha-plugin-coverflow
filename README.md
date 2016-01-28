@@ -52,6 +52,7 @@ If you inspect the code closely, you’ll notice it references a script “cover
 
 ```
 ScriptAlias /coverflow.pl "/var/lib/koha/mykoha/plugins/Koha/Plugin/Com/ByWaterSolutions/CoverFlow/coverflow.pl"
+Alias /plugin "/var/lib/koha/mykoha/plugins"
 ```
 
 This line gives us access to the coverflow.pl script from the OPAC. This script retrieves the report data and passes it back to the public catalog for creating the coverflow widget. Koha::Cache is supported in order to make the widget load as quickly as possible!
