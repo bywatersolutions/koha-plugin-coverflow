@@ -1,0 +1,29 @@
+{
+  "name": "koha-coverflow-plugin",
+  "version": "2.2.0",
+  "description": "Koha CoverFlow Plugin",
+  "main": "index.js",
+  "dependencies": {
+    "gulp-git": "^1.11.0",
+    "gulp-zip": "^3.2.0"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-cli": "^1.2.2",
+    "gulp-github-release": "^1.1.5",
+    "gulp-zip": "^3.2.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bywatersolutions/koha-plugin-coverflow.git"
+  },
+  "author": "Kyle M Hall <kyle@bywatersolutions.com>",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/bywatersolutions/koha-plugin-coverflow/issues"
+  },
+  "homepage": "https://github.com/bywatersolutions/koha-plugin-coverflow#readme"
+}
