@@ -1,35 +1,35 @@
 $(document).ready(function () {
-	$.getScript("/plugin/Koha/Plugin/Com/ByWaterSolutions/CoverFlow/jquery-flipster/src/js/jquery.flipster.min.js", function (data, textStatus, jqxhr) {
-		$("head").append("<link id='flipster-css' href='/plugin/Koha/Plugin/Com/ByWaterSolutions/CoverFlow/jquery-flipster/src/css/jquery.flipster.min.css' type='text/css' rel='stylesheet' />");
-		[% FOREACH m IN mapping %]
-			$('[% m.selector %]').load("/coverflow.pl?id=[% m.id %]", function () {
-			        $('.coverTest img').on("load", function(){
-					if ( this.naturalHeight == 1 ) {
-						$(this).attr("src", "http://media.bywatersolutions.com/Model/NoImage.png");
+    $.getScript("/plugin/Koha/Plugin/Com/ByWaterSolutions/CoverFlow/bower_components/jquery-flipster/dist/jquery.flipster.min.js", function (data, textStatus, jqxhr) {
+        $("head").append("<link id='flipster-css' href='/plugin/Koha/Plugin/Com/ByWaterSolutions/CoverFlow/bower_components/jquery-flipster/dist/jquery.flipster.min.css' type='text/css' rel='stylesheet' />");
+        [% FOREACH m IN mapping %]
+            $('[% m.selector %]').load("/coverflow.pl?id=[% m.id %]", function () {
+                    $('.coverTest img').on("load", function(){
+                    if ( this.naturalHeight == 1 ) {
+                        $(this).attr("src", "http://media.bywatersolutions.com/Model/NoImage.png");
                                         }
-			        });
-				var opt = {
-					'items': '.item',
-					'minfactor': 15, // how much is the next item smaller than previous in pixels
-					'distribution': 1.5, // how apart are the items (items become separated when this value is below 1)
-					'scalethreshold': 0, // after how many items to start scaling
-					'staticbelowthreshold': false, // if true when number of items is below "scalethreshold" - don't animate 
-					'titleclass': 'itemTitle', // class name of the element containing the item title
-					'selectedclass': 'selectedItem', // class name of the selected item
-					'scrollactive': true, // scroll functionality switch
-					'step': { // compressed items on the side are steps
-						'limit': 4, // how many steps should be shown on each side
-						'width': 10, // how wide is the visible section of the step in pixels
-						'scale': true // scale down steps
-					}
-				};
-				$('[% m.selector %]').flipster({
-					[% FOREACH option IN m.options.pairs %]
-						[% option.key %]: '[% option.value %]',
-					[% END %]
-				});
-			});
-		[% END %]
-	});
+                    });
+                var opt = {
+                    'items': '.item',
+                    'minfactor': 15, // how much is the next item smaller than previous in pixels
+                    'distribution': 1.5, // how apart are the items (items become separated when this value is below 1)
+                    'scalethreshold': 0, // after how many items to start scaling
+                    'staticbelowthreshold': false, // if true when number of items is below "scalethreshold" - don't animate 
+                    'titleclass': 'itemTitle', // class name of the element containing the item title
+                    'selectedclass': 'selectedItem', // class name of the selected item
+                    'scrollactive': true, // scroll functionality switch
+                    'step': { // compressed items on the side are steps
+                        'limit': 4, // how many steps should be shown on each side
+                        'width': 10, // how wide is the visible section of the step in pixels
+                        'scale': true // scale down steps
+                    }
+                };
+                $('[% m.selector %]').flipster({
+                    [% FOREACH option IN m.options.pairs %]
+                        [% option.key %]: '[% option.value %]',
+                    [% END %]
+                });
+            });
+        [% END %]
+    });
 });
 
