@@ -1,0 +1,14 @@
+{
+  "name": "Koha CoverFlow Plugin",
+  "homepage": "https://github.com/bywatersolutions/koha-plugin-coverflow",
+  "description": "A CoverFlow plugin for Koha",
+  "main": "",
+  "license": "GPL v3",
+  "private": true,
+  "ignore": [
+    "**/.*"
+  ],
+  "dependencies": {
+    "jquery-flipster": "drien/jquery-flipster#^1.1.2"
+  }
+}
