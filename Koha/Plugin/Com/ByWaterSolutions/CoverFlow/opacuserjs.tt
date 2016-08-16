@@ -3,7 +3,7 @@ $(document).ready(function () {
         $("head").append("<link id='flipster-css' href='/plugin/Koha/Plugin/Com/ByWaterSolutions/CoverFlow/bower_components/jquery-flipster/dist/jquery.flipster.min.css' type='text/css' rel='stylesheet' />");
         [% FOREACH m IN mapping %]
             $('[% m.selector %]').load("/coverflow.pl?id=[% m.id %]", function () {
-                    $('.coverTest img').on("load", function(){
+                    $('.koha-coverflow img').on("load", function(){
                     if ( this.naturalHeight == 1 ) {
                         $(this).attr("src", "http://media.bywatersolutions.com/Model/NoImage.png");
                                         }
