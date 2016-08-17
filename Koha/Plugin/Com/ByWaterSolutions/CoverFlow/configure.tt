@@ -1,6 +1,21 @@
 [% INCLUDE 'doc-head-open.inc' %]
  <title>Koha: Cover Flow Plugin: Configuration</title>
 [% INCLUDE 'doc-head-close.inc' %]
+
+<script type="text/javascript">
+$(document).ready(function() {
+    $("#coverlinks").change(function() {
+            if ( $(this).prop("checked") ){
+               $("#showtitle").prop("disabled",false);
+            }
+            else {
+                $("#showtitle").prop("disabled",true);
+            }
+    });
+});
+
+</script>
+
 </head>
 <body>
 [% INCLUDE 'header.inc' %]
@@ -12,12 +27,19 @@
     <!-- We can access our own plugins resource files using the PLUGIN_PATH variable. -->
     <img src="[% PLUGIN_PATH %]/logo.png" />
     <h3>Koha: Cover Flow Plugin: Configuration</h3>
-
     <!-- Notice our form here has no 'action', this is good, it means that our forms will always get passed back to 'plugins/run.pl'. You could hard code it instead if you prefer -->
     <form method="get">
         <!-- Always pass these two parameters so the plugin system knows what to execute! -->
         <input type="hidden" name="class" value="[% CLASS %]"/>
         <input type="hidden" name="method" value="[% METHOD %]"/>
+
+        <fieldset id="linkopts">
+            <legend>Link options</legend>
+            <p>Unless below is checked titles will appear as links under the images</p>
+            <input type="checkbox" id="coverlinks" name="coverlinks" [% IF (coverlinks) %]checked="checked"[% END %] value="1"> Use images as links </input>
+            <input type="checkbox" id="showtitle" name="showtitle" [%IF !(coverlinks) %] disabled="true" [% END %]  [% IF (showtitle) %]checked="checked"[% END %] value="1"> (if using images as links also show title text)</input>
+            <br/>
+        </fieldset>
 
         [% IF error %]<div class="warn alert error">Error: [% error %]</div>[% END %]
 

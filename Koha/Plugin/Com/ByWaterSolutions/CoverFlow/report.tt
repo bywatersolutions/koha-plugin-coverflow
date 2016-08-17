@@ -3,9 +3,17 @@
         [% FOREACH d IN data %]
             [% IF d.isbn %]
                 <li>
-                    <img src="http://images.amazon.com/images/P/[% d.isbn %].01.LZZZZZZZ.jpg" />
-                    <br/>
-                    <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% d.biblionumber %]">[% d.title %]</a>
+                    [% IF (coverlinks) %]
+                        <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% d.biblionumber %]"><img src="http://images.amazon.com/images/P/[% d.isbn %].01.LZZZZZZZ.jpg" /></a>
+                        [% IF showtitle %]
+                            <br/>
+                            <p>[% d.title %]</p>
+                        [% END %]
+                    [% ELSE %]
+                        <img src="http://images.amazon.com/images/P/[% d.isbn %].01.LZZZZZZZ.jpg" />
+                        <br/>
+                        <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% d.biblionumber %]">[% d.title %]</a>
+                    [% END %]
                 </li>
             [% END %]
         [% END %]
