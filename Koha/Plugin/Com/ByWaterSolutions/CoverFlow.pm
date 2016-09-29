@@ -8,13 +8,12 @@ use base qw(Koha::Plugins::Base);
 
 ## We will also need to include any Koha libraries we want to access
 use C4::Context;
-use C4::Branch;
 use C4::Members;
 use C4::Auth;
 use C4::Reports::Guided;
 use MARC::Record;
 use C4::Koha qw(GetNormalizedISBN);
-use Koha::Cache;
+use Koha::Caches;
 use JSON;
 use Business::ISBN;
 use JavaScript::Minifier qw(minify);
@@ -90,7 +89,7 @@ sub configure {
         my $template = $self->get_template( { file => 'configure.tt' } );
 
         ## Grab the values we already have for our settings, if any exist
-        $template->param( mapping => $self->retrieve_data('mapping'), coverlinks => $self->retrieve_data('coverlinks'), showtitle => $self->retrieve_data('showtitle'), custom_image => $sefl->retrieve_data('custom_image'), );
+        $template->param( mapping => $self->retrieve_data('mapping'), coverlinks => $self->retrieve_data('coverlinks'), showtitle => $self->retrieve_data('showtitle'), custom_image => $self->retrieve_data('custom_image'), );
 
 
         print $cgi->header(
@@ -223,7 +222,7 @@ sub get_report {
 
     my @sql_params = $sql_params ? @$sql_params : ();
 
-    my $cache;#        = Koha::Cache->get_instance();
+    my $cache;#        = Koha::Caches->get_instance();
     my $cache_active;# = $cache->is_cache_active;
     my ( $cache_key, $json_text );
     if ($cache_active) {
