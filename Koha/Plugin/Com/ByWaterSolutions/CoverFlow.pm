@@ -90,7 +90,7 @@ sub configure {
         my $template = $self->get_template( { file => 'configure.tt' } );
 
         ## Grab the values we already have for our settings, if any exist
-        $template->param( mapping => $self->retrieve_data('mapping'), coverlinks => $self->retrieve_data('coverlinks'), showtitle => $self->retrieve_data('showtitle'), );
+        $template->param( mapping => $self->retrieve_data('mapping'), coverlinks => $self->retrieve_data('coverlinks'), showtitle => $self->retrieve_data('showtitle'), custom_image => $sefl->retrieve_data('custom_image'), );
 
 
         print $cgi->header(
@@ -105,11 +105,13 @@ sub configure {
     else {
         my $coverlinks = $cgi->param('coverlinks') ? 1:0;
         my $showtitle = $cgi->param('showtitle') ? 1:0;
+        my $custom_image = $cgi->param('custom_image');
         $self->store_data(
             {
                 mapping            => $cgi->param('mapping'),
                 coverlinks         => $coverlinks,
                 showtitle          => $showtitle,
+                custom_image       => $custom_image,
                 last_configured_by => C4::Context->userenv->{'number'},
             }
         );
