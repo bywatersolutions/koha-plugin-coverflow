@@ -41,6 +41,9 @@ $(document).ready(function() {
             <br/>
         </fieldset>
 
+        <label for="custom_image">Custom image to use if none is found (enter a full URL):</label>
+        <input type="text" id="custom_image" name="custom_image" value="[% custom_image %]" />
+
         [% IF error %]<div class="warn alert error">Error: [% error %]</div>[% END %]
 
         <label for="mapping">Mapping: </label>

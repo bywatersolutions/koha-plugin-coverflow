@@ -5,7 +5,7 @@ $(document).ready(function () {
             $('[% m.selector %]').load("/coverflow.pl?id=[% m.id %]", function () {
                     $('.koha-coverflow img').on("load", function(){
                     if ( this.naturalHeight == 1 ) {
-                        $(this).attr("src", "http://media.bywatersolutions.com/Model/NoImage.png");
+                        $(this).attr("src", [% IF (custom_image) %]"[% custom_image %][% ELSE %]"http://media.bywatersolutions.com/Model/NoImage.png")[% END%];
                                         }
                     });
                 var opt = {

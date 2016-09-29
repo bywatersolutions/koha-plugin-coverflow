@@ -103,8 +103,6 @@ sub configure {
         print $template->output();
     }
     else {
-        warn "got here\n";
-        warn $cgi->param('coverlinks')."\n";
         my $coverlinks = $cgi->param('coverlinks') ? 1:0;
         my $showtitle = $cgi->param('showtitle') ? 1:0;
         $self->store_data(
