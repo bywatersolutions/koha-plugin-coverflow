@@ -27,7 +27,12 @@ Once the plugin is installed, the steps to get your coverflow to show up are as 
 
 First, you need to create one or more public reports for your coverflow widget or widgets to be based on. This is how the plugin knows what the content of your widget should contain. Each report needs only three columns; title, biblionumber, and isbn. It is important that you have a good and valid isbn, as that is the datum used to actually fetch the cover. In the iteration of the plugin, we are using Amazon cover images, but I believe in the end I will make the cover image fetcher configurable so we can use any data source for cover image fetching.
 
-Second, we need to configure the plugin. The plugin configuration is a single text area that uses YAML ( actually, it’s JSON, whcih is a subset of YAML ) to store the configuration options. In this example it looks like this:
+Note: You can add an additional column 'localcover' - this should be blank if the biblio doesn't have a localcover and can contain any other data if it does. If this column is populated a local cover will be used.
+
+Second, we need to configure the plugin. 
+The first option is whether to use coverimages as the links to the biblios, and whether or not to display titles under images if so.
+The second option is whether to use a custom image for titles where no cover is found. THis should be a full URL to your image.
+The third plugin configuration is a single text area that uses YAML ( actually, it’s JSON, whcih is a subset of YAML ) to store the configuration options. In this example it looks like this:
 
 ```
 - id: 42
