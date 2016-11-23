@@ -4,13 +4,23 @@
             [% IF d.isbn %]
                 <li>
                     [% IF (coverlinks) %]
-                        <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% d.biblionumber %]"><img src="http://images.amazon.com/images/P/[% d.isbn %].01.LZZZZZZZ.jpg" /></a>
+                        <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% d.biblionumber %]">
+                            [% IF d.localcover %]
+                                <img src="/cgi-bin/koha/opac-image.pl?biblionumber=[% d.biblionumber %]" />
+                            [% ELSE %]
+                                <img src="http://images.amazon.com/images/P/[% d.isbn %].01.LZZZZZZZ.jpg" />
+                            [% END %]
+                        </a>
                         [% IF showtitle %]
                             <br/>
                             <p>[% d.title %]</p>
                         [% END %]
                     [% ELSE %]
-                        <img src="http://images.amazon.com/images/P/[% d.isbn %].01.LZZZZZZZ.jpg" />
+                        [% IF d.localcover %]
+                            <img src="/cgi-bin/koha/opac-image.pl?biblionumber=[% d.biblionumber %]" />
+                        [% ELSE %]
+                            <img src="http://images.amazon.com/images/P/[% d.isbn %].01.LZZZZZZZ.jpg" />
+                        [% END %]
                         <br/>
                         <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% d.biblionumber %]">[% d.title %]</a>
                     [% END %]
