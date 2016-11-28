@@ -20,7 +20,7 @@ use JavaScript::Minifier qw(minify);
 
 
 ## Here we set our plugin version
-our $VERSiION = "{VERSION}";
+our $VERSION = "{VERSION}";
 
 ## Here is our metadata, some keys are required, some are optional
 our $metadata = {
@@ -222,16 +222,16 @@ sub get_report {
 
     my @sql_params = $sql_params ? @$sql_params : ();
 
-    my $cache;#        = Koha::Caches->get_instance();
-    my $cache_active;# = $cache->is_cache_active;
-    my ( $cache_key, $json_text );
-    if ($cache_active) {
-        $cache_key =
-            "opac:report:"
-          . ( $report_name ? "name:$report_name" : "id:$report_id" )
-          . join( '-', @sql_params );
-        $json_text = $cache->get_from_cache($cache_key);
-    }
+     my $cache;#        = Koha::Caches->get_instance();
+     my $cache_active;# = $cache->is_cache_active;
+     my ( $cache_key, $json_text );
+#    if ($cache_active) {
+#        $cache_key =
+#            "opac:report:"
+#          . ( $report_name ? "name:$report_name" : "id:$report_id" )
+#          . join( '-', @sql_params );
+#        $json_text = $cache->get_from_cache($cache_key);
+#    }
 
     unless ($json_text) {
         my $offset = 0;
@@ -249,10 +249,10 @@ sub get_report {
             map { $_->{isbn} = GetNormalizedISBN( $_->{isbn} ) } @$lines;
             $json_text = to_json($lines);
 
-            if ($cache_active) {
-                $cache->set_in_cache( $cache_key, $json_text,
-                    { expiry => $report_rec->{cache_expiry} } );
-            }
+#            if ($cache_active) {
+#                $cache->set_in_cache( $cache_key, $json_text,
+#                    { expiry => $report_rec->{cache_expiry} } );
+#            }
         }
         else {
             $json_text = to_json($errors);
