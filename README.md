@@ -76,3 +76,27 @@ The final step is to put your selector element somewhere in your public catalog.
 ```
 
 Once that is in place, you need only refresh your OPAC page, and there you have it, your very own catalog coverflow widget! Not only do these coverflows look great on a computer screen, but they look great on mobile platforms as well, and are even touch responsive!
+
+# Build and release
+
+To use the new release functionality you must first install node/npm - these worked well for me:
+https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions
+
+Next make sure to globally install gulp:
+sudo node i gulp -g
+
+You will need to setup a github access token:
+https://help.github.com/articles/creating-an-access-token-for-command-line-use/
+
+Then export it in into an environment variable:
+export GITHUB_TOKEN={paste token here}
+
+Before releasing update the version in package.json file
+
+Then, use the commands:
+gulp build
+gulp release
+
+The first will create the kpz, the second will create a new release on the github repoisitory and attach the kpz created above
+
+
