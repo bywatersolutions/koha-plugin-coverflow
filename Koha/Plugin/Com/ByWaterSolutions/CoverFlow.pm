@@ -13,14 +13,14 @@ use C4::Auth;
 use C4::Reports::Guided;
 use MARC::Record;
 use C4::Koha qw(GetNormalizedISBN);
-use Koha::Caches;
+#use Koha::Caches; FIXME not actually being used and causes error in some version
 use JSON;
 use Business::ISBN;
 use JavaScript::Minifier qw(minify);
 
 
 ## Here we set our plugin version
-our $VERSION = "{VERSION}";
+our $VERSiION = "{VERSION}";
 
 ## Here is our metadata, some keys are required, some are optional
 our $metadata = {
