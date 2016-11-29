@@ -138,7 +138,7 @@ sub configure {
                 print $template->output();
             }
             else {
-                $self->update_opacuserjs($mapping);
+                $self->update_opacuserjs($mapping, $custom_image);
                 $self->go_home();
             }
         }
@@ -270,6 +270,7 @@ sub update_opacuserjs {
 
     my $template = $self->get_template( { file => 'opacuserjs.tt' } );
     $template->param( 'mapping' => $mapping );
+    $template->param( 'custom_image' => $custom_image );
 
     my $coverflow_js = $template->output();
 
