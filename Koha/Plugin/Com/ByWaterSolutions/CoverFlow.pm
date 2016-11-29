@@ -263,7 +263,7 @@ sub get_report {
 }
 
 sub update_opacuserjs {
-    my ($self, $mapping) = @_;
+    my ($self, $mapping, $custom_image) = @_;
 
     my $opacuserjs = C4::Context->preference('opacuserjs');
     $opacuserjs =~ s/\n\/\* JS for Koha CoverFlow Plugin.*End of JS for Koha CoverFlow Plugin \*\///gs;
