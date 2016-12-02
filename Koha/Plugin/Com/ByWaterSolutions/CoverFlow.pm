@@ -65,7 +65,13 @@ sub report {
     my $json = get_report( { cgi => $cgi } );
     my $data = from_json($json);
 
-    $template->param( 'data' => $data, coverlinks => $self->retrieve_data('coverlinks'), showtitle => $self->retrieve_data('showtitle'), );
+    $template->param(
+            'data'      => $data,
+            coverlinks  => $self->retrieve_data('coverlinks'),
+            showtitle   => $self->retrieve_data('showtitle'),
+            size_limit  => $self->retrieve_data('size_limit'),
+            title_limit => $self->retrieve_data('title_limit'),
+            );
 
     print $cgi->header(
         {
@@ -89,7 +95,14 @@ sub configure {
         my $template = $self->get_template( { file => 'configure.tt' } );
 
         ## Grab the values we already have for our settings, if any exist
-        $template->param( mapping => $self->retrieve_data('mapping'), coverlinks => $self->retrieve_data('coverlinks'), showtitle => $self->retrieve_data('showtitle'), custom_image => $self->retrieve_data('custom_image'), );
+        $template->param(
+                mapping => $self->retrieve_data('mapping'),
+                coverlinks => $self->retrieve_data('coverlinks'),
+                showtitle => $self->retrieve_data('showtitle'),
+                custom_image => $self->retrieve_data('custom_image'),
+                size_limit => $self->retrieve_data('size_limit'),
+                title_limit => $self->retrieve_data('title_limit'),
+                );
 
 
         print $cgi->header(
@@ -111,6 +124,8 @@ sub configure {
                 coverlinks         => $coverlinks,
                 showtitle          => $showtitle,
                 custom_image       => $custom_image,
+                size_limit         => $cgi->param('size_limit'),
+                title_limit        => $cgi->param('title_limit'),
                 last_configured_by => C4::Context->userenv->{'number'},
             }
         );

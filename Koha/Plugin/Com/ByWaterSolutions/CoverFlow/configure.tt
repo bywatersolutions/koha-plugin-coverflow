@@ -44,9 +44,17 @@ $(document).ready(function() {
         <label for="custom_image">Custom image to use if none is found (enter a full URL):</label>
         <input type="text" id="custom_image" name="custom_image" value="[% custom_image %]" />
 
+        <br/>
+        <label for="size_limit">Limit image size (height in pixels)</label>
+        <input type="number" id="size_limit" name="size_limit" value="[% size_limit %]" />
+
+        <br/>
+        <label for="title_limit">Limit title length (width in pixels)</label>
+        <input type="number" id="title_limit" name="title_limit" value="[% title_limit %]" />
+
         [% IF error %]<div class="warn alert error">Error: [% error %]</div>[% END %]
 
-        <label for="mapping">Mapping: </label>
+        <br/><label for="mapping">Mapping: </label>
         <textarea rows="15" cols="200" name="mapping">[% mapping %]</textarea>
         <div>
             Add a line for each html element you'd like to replace with a widget and the id of the report to use to generate the widget.
