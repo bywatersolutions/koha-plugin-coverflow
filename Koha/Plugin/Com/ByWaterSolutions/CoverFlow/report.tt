@@ -8,7 +8,7 @@
                             [% IF d.localcover %]
                                 <img src="/cgi-bin/koha/opac-image.pl?biblionumber=[% d.biblionumber %]" />
                             [% ELSE %]
-                                <img src="http://images.amazon.com/images/P/[% d.isbn %].01.LZZZZZZZ.jpg" />
+                                <img src="https://images-na.ssl-images-amazon.com/images/P/[% d.isbn %].01.LZZZZZZZ.jpg" />
                             [% END %]
                         </a>
                         [% IF showtitle %]
@@ -19,7 +19,7 @@
                         [% IF d.localcover %]
                             <img src="/cgi-bin/koha/opac-image.pl?biblionumber=[% d.biblionumber %]" />
                         [% ELSE %]
-                            <img src="http://images.amazon.com/images/P/[% d.isbn %].01.LZZZZZZZ.jpg" />
+                            <img src="https://images-na.ssl-images-amazon.com/images/P/[% d.isbn %].01.LZZZZZZZ.jpg" />
                         [% END %]
                         <br/>
                         <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% d.biblionumber %]">[% d.title %]</a>
