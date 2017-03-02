@@ -1,7 +1,7 @@
 <div class="koha-coverflow">
     <ul>
         [% FOREACH d IN data %]
-            [% IF d.isbn %]
+            [% IF d.isbn || d.localcover %]
                 <li>
                     [% IF (coverlinks) %]
                         <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% d.biblionumber %]">
