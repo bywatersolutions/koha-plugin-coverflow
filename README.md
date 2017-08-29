@@ -41,7 +41,7 @@ The third plugin configuration is a single text area that uses YAML ( actually, 
   style: coverflow
 ```
 
-In this example, we are telling the plugin to use the report with id 42, and use it to create a coverflow widget to replace the HTML element with the id “coverflow”. The options list is passed directly to Flipster, so any options supported by Flipster can be set from the plugin configuration! In fact, in addition to the traditional coverflow, Flipster has a “carousel” mode which is a much more compact version of the coverflow. You can also configure which cover the widget will start on, among other options.
+In this example, we are telling the plugin to use the report with id 42, and use it to create a coverflow widget to replace the HTML element with the id “coverflow”. The options list is passed directly to Flipster, so any options supported by Flipster can be set from the plugin configuration. `style` may be set to `'coverflow'`, `'carousel'`, `'wheel'` or `'flat'`; see the [jQuery Flipster demo](http://brokensquare.com/Code/jquery-flipster/demo/) for examples of each.
 
 At the time the plugins options are saved or updated, the plugin will then generate some minified JavaScript code that is automatically stored in the Koha system preference OpacUserJS. Here is an example of the output:
 
