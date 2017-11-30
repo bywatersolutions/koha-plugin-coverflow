@@ -1,6 +1,7 @@
 {
   "name": "koha-coverflow-plugin",
   "version": "2.4.0",
+  "previous_version": "2.4.0",
   "description": "Koha CoverFlow Plugin",
   "main": "index.js",
   "dependencies": {
@@ -26,5 +27,10 @@
   "bugs": {
     "url": "https://github.com/bywatersolutions/koha-plugin-coverflow/issues"
   },
-  "homepage": "https://github.com/bywatersolutions/koha-plugin-coverflow#readme"
+  "homepage": "https://github.com/bywatersolutions/koha-plugin-coverflow#readme",
+  "dependencies": {
+    "datetime": "0.0.3",
+    "jsonfile": "^4.0.0",
+    "node-datetime": "^2.0.0"
+  }
 }
