@@ -2,8 +2,8 @@
 
 use Modern::Perl;
 
-use FindBin;                 # locate this script
-use lib "$FindBin::Bin/../../../../../";  # use the parent directory
+use C4::Context;
+use lib C4::Context->config("pluginsdir");
 
 use Koha::Plugin::Com::ByWaterSolutions::CoverFlow;
 
