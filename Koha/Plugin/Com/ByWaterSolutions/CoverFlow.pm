@@ -221,12 +221,13 @@ sub get_report {
     my $report_id   = $params->{'id'};
     my $report_name = $params->{'name'};
     my $sql_params  = $params->{'sql_params'};
+    my @sql_params;
 
     my $cgi = $params->{'cgi'};
     if ($cgi) {
         $report_id   ||= $cgi->param('id');
         $report_name ||= $cgi->param('name');
-        $sql_params  ||= $cgi->param('sql_params');
+        @sql_params  = $cgi->multi_param('sql_params');
     }
 
     my $report_rec = get_saved_report(
@@ -235,8 +236,7 @@ sub get_report {
 
     #die "Sorry this report is not public\n" unless $report_rec->{public};
 
-    my @sql_params = $sql_params ? @$sql_params : ();
-
+     $sql_params ||= \@sql_params;
      my $cache;#        = Koha::Caches->get_instance();
      my $cache_active;# = $cache->is_cache_active;
      my ( $cache_key, $json_text );
@@ -257,7 +257,7 @@ sub get_report {
         $sql =~ s/(<<.*?>>)/\?/g;
 
         my ( $sth, $errors ) =
-          execute_query( $sql, $offset, $limit, \@sql_params );
+          execute_query( $sql, $offset, $limit, $sql_params );
         if ($sth) {
             my $lines;
             $lines = $sth->fetchall_arrayref( {} );
