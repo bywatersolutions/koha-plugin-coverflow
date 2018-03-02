@@ -41,16 +41,28 @@ $(document).ready(function() {
             <br/>
         </fieldset>
 
-        <label for="custom_image">Custom image to use if none is found (enter a full URL):</label>
-        <input type="text" id="custom_image" name="custom_image" value="[% custom_image %]" />
+        <fieldset id="image options">
+            <legend>Image options</legend>
 
-        <br/>
-        <label for="size_limit">Limit image size (height in pixels)</label>
-        <input type="number" id="size_limit" name="size_limit" value="[% size_limit %]" />
+            <label for="custom_image">Custom image to use if none is found (enter a full URL):</label>
+            <input type="text" id="custom_image" name="custom_image" value="[% custom_image %]" />
 
-        <br/>
-        <label for="title_limit">Limit title length (width in pixels)</label>
-        <input type="number" id="title_limit" name="title_limit" value="[% title_limit %]" />
+            <br/>
+            <label for="use_coce">*EXPERIMENTAL* Use Coce for cover images.</label>
+            <input type="checkbox" id="use_coce" name="use_coce" [% IF (use_coce) %]checked="checked"[% END %] value="1"></input>
+            </br>
+            <p>Note you must define the url for the Coce service and select service providers in the system preferences if you choose this, you do not need to enable coce images for the catalog</p>
+
+            </br>
+            <label for="size_limit">Limit image size (height in pixels)</label>
+            <input type="number" id="size_limit" name="size_limit" value="[% size_limit %]" />
+
+            <br/>
+            <label for="title_limit">Limit title length (width in pixels)</label>
+            <input type="number" id="title_limit" name="title_limit" value="[% title_limit %]" />
+        </fieldset>
+
+        </br>
 
         [% IF error %]<div class="warn alert error">Error: [% error %]</div>[% END %]
 

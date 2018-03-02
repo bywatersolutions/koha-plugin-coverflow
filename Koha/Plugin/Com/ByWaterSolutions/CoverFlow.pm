@@ -71,6 +71,7 @@ sub report {
             showtitle   => $self->retrieve_data('showtitle'),
             size_limit  => $self->retrieve_data('size_limit'),
             title_limit => $self->retrieve_data('title_limit'),
+            use_coce => $self->retrieve_data('use_coce'),
             );
 
     print $cgi->header(
@@ -102,6 +103,7 @@ sub configure {
                 custom_image => $self->retrieve_data('custom_image'),
                 size_limit => $self->retrieve_data('size_limit'),
                 title_limit => $self->retrieve_data('title_limit'),
+                use_coce => $self->retrieve_data('use_coce'),
                 );
 
 
@@ -116,6 +118,7 @@ sub configure {
     }
     else {
         my $coverlinks = $cgi->param('coverlinks') ? 1:0;
+        my $use_coce = $cgi->param('use_coce') ? 1:0;
         my $showtitle = $cgi->param('showtitle') ? 1:0;
         my $custom_image = $cgi->param('custom_image');
         $self->store_data(
@@ -127,6 +130,7 @@ sub configure {
                 size_limit         => $cgi->param('size_limit'),
                 title_limit        => $cgi->param('title_limit'),
                 last_configured_by => C4::Context->userenv->{'number'},
+                use_coce => $use_coce,
             }
         );
 
