@@ -25,9 +25,32 @@ Once set up is complete you will need to alter your UseKohaPlugins system prefer
 
 Once the plugin is installed, the steps to get your coverflow to show up are as follows:
 
-First, you need to create one or more public reports for your coverflow widget or widgets to be based on. This is how the plugin knows what the content of your widget should contain. Each report needs only three columns; title, biblionumber, and isbn. It is important that you have a good and valid isbn, as that is the datum used to actually fetch the cover. In the iteration of the plugin, we are using Amazon cover images, but I believe in the end I will make the cover image fetcher configurable so we can use any data source for cover image fetching.
+First, you need to create one or more public reports for your coverflow widget or widgets to be based on. This is how the plugin knows what the content of your widget should contain. Each report needs only three columns; title, biblionumber, and isbn. It is important that you have a good and valid isbn, as that is the datum used to actually fetch the cover. Example finding items added in the last 30 days:
+```
+SELECT b.biblionumber, SUBSTRING_INDEX(m.isbn, ' ', 1) AS isbn, b.title
+  FROM items i
+  LEFT JOIN biblioitems m USING (biblioitemnumber)
+  LEFT JOIN biblio b ON (i.biblionumber=b.biblionumber)
+  WHERE DATE_SUB(CURDATE(),INTERVAL 30 DAY) <= i.dateaccessioned AND m.isbn IS NOT NULL AND m.isbn != ''
+  HAVING isbn != ""
+  GROUP BY biblionumber
+  ORDER BY rand()
+  LIMIT 30
+```
 
-Note: You can add an additional column 'localcover' - this should be blank if the biblio doesn't have a localcover and can contain any other data if it does. If this column is populated a local cover will be used.
+In the iteration of the plugin, we are using Amazon cover images, but I believe in the end I will make the cover image fetcher configurable so we can use any data source for cover image fetching. **Coce has been added as experimental cover source feel free to test using URL https://coce.bywatersolutions.com**
+
+Note: You can add an additional column 'localcover' - this should be blank if the biblio doesn't have a localcover and can contain any other data if it does. If this column is populated a local cover will be used. Example below:
+```
+SELECT DISTINCT biblio.title, biblio.biblionumber,  SUBSTRING_INDEX(biblioitems.isbn, ' ', 1) AS isbn, c.imagenumber AS localcover 
+FROM items 
+LEFT JOIN biblioitems USING (biblioitemnumber) 
+LEFT JOIN biblio ON (items.biblionumber=biblio.biblionumber)
+LEFT JOIN biblioimages c ON (items.biblionumber=c.biblionumber)
+WHERE biblioitems.isbn IS NOT NULL AND biblioitems.isbn !=''
+ORDER  BY RAND() 
+LIMIT  15
+```
 
 Second, we need to configure the plugin. 
 The first option is whether to use coverimages as the links to the biblios, and whether or not to display titles under images if so.
@@ -76,6 +99,35 @@ The final step is to put your selector element somewhere in your public catalog.
 ```
 
 Once that is in place, you need only refresh your OPAC page, and there you have it, your very own catalog coverflow widget! Not only do these coverflows look great on a computer screen, but they look great on mobile platforms as well, and are even touch responsive!
+# Report with parameters
+It is now possible to use reports that take input. For example,in a multibranchsystem you can setup a single report as below:
+```
+SELECT b.biblionumber, SUBSTRING_INDEX(m.isbn, ' ', 1) AS isbn, b.title
+  FROM items i
+  LEFT JOIN biblioitems m USING (biblioitemnumber)
+  LEFT JOIN biblio b ON (i.biblionumber=b.biblionumber)
+  WHERE DATE_SUB(CURDATE(),INTERVAL 30 DAY) <= i.dateaccessioned AND m.isbn IS NOT NULL AND m.isbn != ''
+  AND items.homebranch = <<Branch|branches>>
+  HAVING isbn != ""
+  GROUP BY biblionumber
+  ORDER BY rand()
+  LIMIT 30
+```
+Then in the plugin configuration you can use thismultiple times:
+```
+- id: 42
+  selector: #coverflow1
+  params:
+    - BRANCHA
+  options:
+    style: coverflow
+- id: 42
+  selector: #coverflow2
+  params:
+    - BRANCHB
+  options:
+    style: coverflow
+```
 
 # Build and release
 
