@@ -1,4 +1,5 @@
-<div class="koha-coverflow">
+[% USE Koha %]
+<div class="koha-coverflow" [% IF (use_coce) %]style="min-height: 200px"[% END %]>
     <ul>
         [% FOREACH d IN data %]
             [% IF d.isbn || d.localcover %]
@@ -7,6 +8,8 @@
                         <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% d.biblionumber %]">
                             [% IF d.localcover %]
                                 <img [% IF size_limit %]style="max-height:[% size_limit %]px;"[% END %] src="/cgi-bin/koha/opac-image.pl?biblionumber=[% d.biblionumber %]" />
+                            [% ELSIF (use_coce)  %]
+                                <div style="block" title="[% d.biblionumber %]" class="[% d.isbn %]" id="coce-thumbnail-preview"></div>
                             [% ELSE %]
                                 <img [% IF size_limit %]style="max-height:[% size_limit %]px;"[% END %] src="https://images-na.ssl-images-amazon.com/images/P/[% d.isbn %].01.LZZZZZZZ.jpg" />
                             [% END %]
@@ -18,6 +21,8 @@
                     [% ELSE %]
                         [% IF d.localcover %]
                             <img [% IF size_limit %]style="max-height:[% size_limit %]px;"[% END %] src="/cgi-bin/koha/opac-image.pl?biblionumber=[% d.biblionumber %]" />
+                        [% ELSIF (use_coce)  %]
+                             <div style="block" title="[% d.biblionumber %]" class="[% d.isbn %]" id="coce-thumbnail-preview"></div>
                         [% ELSE %]
                             <img [% IF size_limit %]style="max-height:[% size_limit %]px;"[% END %] src="https://images-na.ssl-images-amazon.com/images/P/[% d.isbn %].01.LZZZZZZZ.jpg" />
                         [% END %]
@@ -28,4 +33,11 @@
             [% END %]
         [% END %]
     </ul>
+[% IF (use_coce) %]
+<script type="text/javascript" src="/opac-tmpl/bootstrap/js/coce.js"></script>
+<script type="text/javascript">
+      KOHA.coce.getURL('[% Koha.Preference('CoceHost') %]', '[% Koha.Preference('CoceProviders') %]',[% Koha.Preference('OPACURLOpenInNewWindow') %]);
+</script>
+[% END %]
+
 </div>
