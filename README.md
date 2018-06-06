@@ -32,13 +32,13 @@ SELECT b.biblionumber, SUBSTRING_INDEX(m.isbn, ' ', 1) AS isbn, b.title
   LEFT JOIN biblioitems m USING (biblioitemnumber)
   LEFT JOIN biblio b ON (i.biblionumber=b.biblionumber)
   WHERE DATE_SUB(CURDATE(),INTERVAL 30 DAY) <= i.dateaccessioned AND m.isbn IS NOT NULL AND m.isbn != ''
-  HAVING isbn != ""
   GROUP BY biblionumber
+  HAVING isbn != ""
   ORDER BY rand()
   LIMIT 30
 ```
 
-In the iteration of the plugin, we are using Amazon cover images, but I believe in the end I will make the cover image fetcher configurable so we can use any data source for cover image fetching. **Coce has been added as experimental cover source feel free to test using URL https://coce.bywatersolutions.com**
+In this iteration of the plugin, we are using Amazon cover images, a future development would be to make the cover image fetcher configurable so we can use any data source for cover image fetching. **Coce has been added as experimental cover source feel free to test using URL https://coce.bywatersolutions.com**
 
 Note: You can add an additional column 'localcover' - this should be blank if the biblio doesn't have a localcover and can contain any other data if it does. If this column is populated a local cover will be used. Example below:
 ```

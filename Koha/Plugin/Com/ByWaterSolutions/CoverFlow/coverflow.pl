@@ -12,4 +12,4 @@ use CGI;
 my $cgi = new CGI;
 
 my $coverflow = Koha::Plugin::Com::ByWaterSolutions::CoverFlow->new({ cgi => $cgi });
-$coverflow->report();
+$coverflow->run_report();

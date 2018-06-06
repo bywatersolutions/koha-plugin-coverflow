@@ -55,7 +55,7 @@ sub new {
 ## of running a tool. The difference between a tool and a report is
 ## primarily semantic, but in general any plugin that modifies the
 ## Koha database should be considered a tool
-sub report {
+sub run_report {
     my ( $self, $args ) = @_;
 
     my $cgi = $self->{'cgi'};
