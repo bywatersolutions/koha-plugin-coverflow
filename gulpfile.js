@@ -19,7 +19,7 @@ console.log(release_filename);
 console.log(pm_file_path_full_dist);
 
 gulp.task('build', () => {
-    run(`
+    run('
         mkdir dist ;
         cp -ar Koha dist/. ;
         cp -ar JavaScript dist/. ;
@@ -29,7 +29,7 @@ gulp.task('build', () => {
         zip -r ../' + release_filename + ' ./Koha ./JavaScript ;
         cd .. ;
         rm -rf dist ;
-    `).exec();
+    ').exec();
 
 });
 
