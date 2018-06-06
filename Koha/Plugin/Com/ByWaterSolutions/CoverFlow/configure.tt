@@ -35,7 +35,7 @@ $(document).ready(function() {
 
         <fieldset id="linkopts">
             <legend>Link options</legend>
-            <p>Unless below is checked titles will appear as links under the images</p>
+            <p>By default titles will appear under the images and be used as link to the record.</p>
             <input type="checkbox" id="coverlinks" name="coverlinks" [% IF (coverlinks) %]checked="checked"[% END %] value="1"> Use images as links </input>
             <input type="checkbox" id="showtitle" name="showtitle" [%IF !(coverlinks) %] disabled="true" [% END %]  [% IF (showtitle) %]checked="checked"[% END %] value="1"> (if using images as links also show title text)</input>
             <br/>
@@ -66,26 +66,33 @@ $(document).ready(function() {
 
         [% IF error %]<div class="warn alert error">Error: [% error %]</div>[% END %]
 
-        <br/><label for="mapping">Mapping: </label>
-        <textarea rows="15" cols="200" name="mapping">[% mapping %]</textarea>
-        <div>
-            Add a line for each html element you'd like to replace with a widget and the id of the report to use to generate the widget.
-            <br/>Example:<br/><br/>
-            <pre>
-- id: 1
-  selector: #coverflow
-- id: 2
-  selector: .random
-  options:
-    buttons: true
-    autoplay: 4000
-    loop: true
-            </pre>
+        <fieldset id="image options">
+            <legend>Mapping</legend>
+            <textarea rows="15" cols="150" name="mapping">[% mapping %]</textarea>
+        </fieldset>
 
-            <p>Would replace an element with the id 'new_items' with a widget using the Koha report with an id of 5, and also replace any element with a class of 'random' with a widget based on the Koha report with the id 8.</p>
+        <fieldset id="instructions">
+            <legend>Setup instructions</legend>
+            <div>
+                In the above 'Mapping box' add a section for each coverflow. Begin with the report # as the ID, then specify the jQuery selector for the html element you'd like to replace with the coverflow. You can also specify an 'options' section (indented) with additional coverflow settings which are documented <a href="https://github.com/drien/jquery-flipster/blob/master/README.md">here</a>
+                <br/>Note: The plugin uses YAML syntax to read the mapping, spaces matter! :-)
+                <br/>Example mapping with two coverflows:<br/><br/>
+                <pre>
+    - id: 1
+      selector: #coverflow
+    - id: 2
+      selector: .random
+      options:
+        buttons: true
+        autoplay: 4000
+        loop: true
+                </pre>
 
-            <p>Finally, add your target element such as <i>[% FILTER html %]<div id="coverflow"></div>[% END %]</i> to an OPAC system codeference such as OpacMainUserBlock. Position the element where you would like your coverflow widget to appear!</p>
-        </div>
+                <p>Would replace an element with the id 'coverflow' with a coverflow widget using the Koha report with an id of 5, and also replace any element with a class of 'random' with a coverflow widget based on the Koha report with the id 8. The second coverflow would auto scroll through the covers with a 4 second delay and loop when reaching the end</p>
+
+                <p>Finally, add your target element such as <i>[% FILTER html %]<div id="coverflow"></div>[% END %]</i> to an OPAC system codeference such as OpacMainUserBlock. Position the element where you would like your coverflow widget to appear!</p>
+            </div>
+        </fieldset>
 
         <p>
 
