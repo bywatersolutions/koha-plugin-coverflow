@@ -5,7 +5,7 @@ $(document).ready(function () {
             $('[% m.selector %]').load("/coverflow.pl?id=[% m.id %][% FOREACH param IN m.params %]&sql_params=[% param %][% END %]", function () {
                     $('.koha-coverflow img').on("load", function(){
                     if ( this.naturalHeight == 1 ) {
-                        $(this).attr("src", [% IF (custom_image) %]"[% custom_image %]")[% ELSE %]"http://media.bywatersolutions.com/Model/NoImage.png")[% END%];
+                        $(this).attr("src", [% IF (custom_image) %]"[% custom_image %]")[% ELSE %]"https://raw.githubusercontent.com/bywatersolutions/web-assets/master/NoImage.png")[% END%];
                                         }
                     });
                 var opt = {
