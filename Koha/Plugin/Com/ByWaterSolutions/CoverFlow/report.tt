@@ -30,6 +30,23 @@
                         <a [% IF title_limit %]style="max-width:[% title_limit %]px;display:inline-block;"[% END %] href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% d.biblionumber %]">[% d.title %]</a>
                     [% END %]
                 </li>
+            [% ELSE %]
+                <li>
+                    [% IF (coverlinks) %]
+                        <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% d.biblionumber %]">
+                            <img [% IF size_limit %]style="max-height:[% size_limit %]px;"[% END %] src="[% no_image %]" />
+                        </a>
+                        [% IF showtitle %]
+                            <br/>
+                            <p [% IF title_limit %]style="max-width:[% title_limit %]px;display:inline-block;"[% END %]>[% d.title %]</p>
+                        [% END %]
+                    [% ELSE %]
+                        <img [% IF size_limit %]style="max-height:[% size_limit %]px;"[% END %] src="[% no_image %]" />
+                        <br/>
+                        <a [% IF title_limit %]style="max-width:[% title_limit %]px;display:inline-block;"[% END %] href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% d.biblionumber %]">[% d.title %]</a>
+                    [% END %]
+
+                </li>
             [% END %]
         [% END %]
     </ul>

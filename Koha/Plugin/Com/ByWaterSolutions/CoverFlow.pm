@@ -64,6 +64,7 @@ sub run_report {
 
     my $json = get_report( { cgi => $cgi } );
     my $data = from_json($json);
+    my $no_image = $self->retrieve_data('custom_image') || "https://raw.githubusercontent.com/bywatersolutions/web-assets/master/NoImage.png";
 
     $template->param(
             'data'      => $data,
@@ -71,7 +72,8 @@ sub run_report {
             showtitle   => $self->retrieve_data('showtitle'),
             size_limit  => $self->retrieve_data('size_limit'),
             title_limit => $self->retrieve_data('title_limit'),
-            use_coce => $self->retrieve_data('use_coce'),
+            use_coce    => $self->retrieve_data('use_coce'),
+            no_image    => $no_image,
             );
 
     print $cgi->header(
