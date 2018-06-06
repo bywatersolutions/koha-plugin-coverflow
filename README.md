@@ -23,7 +23,9 @@ Once set up is complete you will need to alter your UseKohaPlugins system prefer
 
 # Setup
 
-Once the plugin is installed, the steps to get your coverflow to show up are as follows:
+Once the plugin is installed you can find it under Admin->Manage plugins, currently the coverflow is neither a tool or report plugin, you can also select 'Show all plugins' after following the 'Plugins' link in reports or tools
+
+The steps to get your coverflow to show up are as follows:
 
 First, you need to create one or more public reports for your coverflow widget or widgets to be based on. This is how the plugin knows what the content of your widget should contain. Each report needs only three columns; title, biblionumber, and isbn. It is important that you have a good and valid isbn, as that is the datum used to actually fetch the cover. Example finding items added in the last 30 days:
 ```
