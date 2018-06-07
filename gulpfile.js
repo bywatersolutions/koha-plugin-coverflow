@@ -1,13 +1,14 @@
 const gulp = require('gulp');
-//const zip = require('gulp-zip');
 const release = require('gulp-github-release');
 const fs = require('fs');
-const replace = require('gulp-replace');
 const run = require('gulp-run');
+const dateTime = require('node-datetime');
 
+const dt = dateTime.create();
+const today = dt.format('Y-m-d');
 
-var package_json = JSON.parse(fs.readFileSync('./package.json'));
-var release_filename = package_json.name + '-v' + package_json.version + '.kpz';
+const package_json = JSON.parse(fs.readFileSync('./package.json'));
+const release_filename = `${package_json.name}-v${package_json.version}.kpz`;
 
 var pm_file = 'CoverFlow.pm';
 var pm_file_path = 'Koha/Plugin/Com/ByWaterSolutions/';
@@ -30,21 +31,11 @@ gulp.task('build', () => {
         rm -rf dist ;
     `).exec();
 
+});
+
 gulp.task('release', () => {
     gulp.src(release_filename)
         .pipe(release({
             manifest: require('./package.json') // package.json from which default values will be extracted if they're missing
         }));
 });
-
-/*
-    // Set module version 
-    gulp.src(pm_file_path_full)
-        .pipe(replace('{VERSION}', package_json.version))
-        .pipe(gulp.dest(pm_file_path_dist));
-
-    //FIXME: This doesn't work! It only zips of the first level of directories, leaving them empty
-    gulp.src(['./*', '!gulpfile.js', '!node_modules', '!package.json', '!README.md'])
-        .pipe(zip(release_filename))
-        .pipe(gulp.dest('./'));
-*/
