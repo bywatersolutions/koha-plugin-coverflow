@@ -27,7 +27,7 @@ gulp.task('build', () => {
         sed -i -e "s/{VERSION}/${package_json.version}/g" ${pm_file_path_full_dist} ;
         sed -i -e "s/1900-01-01/${today}/g" ${pm_file_path_full_dist} ;
         cd dist ;
-        zip -r ../${release_filename} ./Koha ;
+        zip -r ../${release_filename} ./Koha ./JavaScript ;
         cd .. ;
         rm -rf dist ;
     `).exec();
