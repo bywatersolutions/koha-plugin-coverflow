@@ -1,0 +1,88 @@
+=head2 Mon Jan 29 19:43:29 2018: C<Module> L<Template::Plugin::Filter::Minify::JavaScript|Template::Plugin::Filter::Minify::JavaScript>
+
+=over 4
+
+=item *
+
+C<installed into: /var/lib/koha/kohadev/plugins/Koha/Plugin/Com/ByWaterSolutions/OpacThemeGaladriel/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.94>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Mon Jan 29 19:43:57 2018: C<Module> L<JavaScript::Minifier|JavaScript::Minifier>
+
+=over 4
+
+=item *
+
+C<installed into: /var/lib/koha/kohadev/plugins/Koha/Plugin/Com/ByWaterSolutions/OpacThemeGaladriel/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 1.14>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Mon Jan 29 19:44:20 2018: C<Module> L<Template::Plugin::Filter::Minify::CSS|Template::Plugin::Filter::Minify::CSS>
+
+=over 4
+
+=item *
+
+C<installed into: /var/lib/koha/kohadev/plugins/Koha/Plugin/Com/ByWaterSolutions/OpacThemeGaladriel/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.95>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Mon Jan 29 19:44:42 2018: C<Module> L<CSS::Minifier|CSS::Minifier>
+
+=over 4
+
+=item *
+
+C<installed into: /var/lib/koha/kohadev/plugins/Koha/Plugin/Com/ByWaterSolutions/OpacThemeGaladriel/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.01>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+

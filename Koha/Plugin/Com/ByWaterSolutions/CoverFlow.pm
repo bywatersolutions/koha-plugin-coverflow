@@ -6,6 +6,24 @@ use Modern::Perl;
 ## Required for all plugins
 use base qw(Koha::Plugins::Base);
 
+# This block allows us to load external modules stored within the plugin itself
+# In this case it's Template::Plugin::Filter::Minify::JavaScript/CSS and deps
+# cpanm --local-lib=. -f Template::Plugin::Filter::Minify::CSS from asssets dir
+BEGIN {
+    use Config;
+    use C4::Context;
+
+    my $pluginsdir = C4::Context->config('pluginsdir');
+    my @pluginsdir = ref($pluginsdir) eq 'ARRAY' ? @$pluginsdir : $pluginsdir;
+    my $plugin_libs = '/Koha/Plugin/Com/ByWaterSolutions/CoverFlow/lib/perl5';
+
+    foreach my $plugin_dir (@pluginsdir){
+        my $local_libs = "$plugin_dir/$plugin_libs";
+        unshift( @INC, $local_libs );
+        unshift( @INC, "$local_libs/$Config{archname}" );
+    }
+}
+
 ## We will also need to include any Koha libraries we want to access
 use C4::Context;
 use C4::Members;
