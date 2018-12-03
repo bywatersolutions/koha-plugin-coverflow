@@ -47,7 +47,7 @@ our $metadata = {
     description     => 'Convert a report into a coverflow style widget!',
     date_authored   => '2014-06-29',
     date_updated    => '1900-01-01',
-    minimum_version => '3.16',
+    minimum_version => '18.11',
     maximum_version => undef,
     version         => $VERSION,
 };
@@ -254,8 +254,16 @@ sub get_report {
         @sql_params  = $cgi->multi_param('sql_params');
     }
 
-    my $report_rec = get_saved_report(
-        $report_name ? { 'name' => $report_name } : { 'id' => $report_id } );
+    my $report_rec;
+    if ( C4::Context->preference('Version') ge '18.110000' ) {
+        require Koha::Reports;
+        $report_rec = Koha::Reports->search(
+            $report_name ? { 'name' => $report_name } : { 'id' => $report_id } );
+        $report_rec = $report_rec->next->unblessed if $report_rec;
+    } else {
+        $report_rec = get_saved_report(
+            $report_name ? { 'name' => $report_name } : { 'id' => $report_id } );
+    }
     if ( !$report_rec ) { die "There is no such report.\n"; }
 
     #die "Sorry this report is not public\n" unless $report_rec->{public};
