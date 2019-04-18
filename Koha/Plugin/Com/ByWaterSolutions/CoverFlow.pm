@@ -1,5 +1,7 @@
 package Koha::Plugin::Com::ByWaterSolutions::CoverFlow;
 
+no warnings 'redefine';
+
 ## It's good practive to use Modern::Perl
 use Modern::Perl;
 
