@@ -3,6 +3,8 @@ package JavaScript::Minifier;
 use strict;
 use warnings;
 
+no warnings 'redefine';
+
 our $VERSION = '1.14'; # VERSION
 
 require Exporter;

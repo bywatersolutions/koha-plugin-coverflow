@@ -3,6 +3,8 @@ package CSS::Minifier;
 use strict;
 use warnings;
 
+no warnings 'redefine';
+
 require Exporter;
 our @ISA = qw(Exporter);
 our @EXPORT_OK = qw(minify);
