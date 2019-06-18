@@ -37,6 +37,7 @@ use C4::Koha qw(GetNormalizedISBN);
 use JSON;
 use Business::ISBN;
 use JavaScript::Minifier qw(minify);
+use Koha::DateUtils;
 
 
 ## Here we set our plugin version
@@ -142,23 +143,12 @@ sub configure {
         my $coverlinks = $cgi->param('coverlinks') ? 1:0;
         my $use_coce = $cgi->param('use_coce') ? 1:0;
         my $showtitle = $cgi->param('showtitle') ? 1:0;
-        my $custom_image = $cgi->param('custom_image');
-        $self->store_data(
-            {
-                mapping            => $cgi->param('mapping'),
-                coverlinks         => $coverlinks,
-                showtitle          => $showtitle,
-                custom_image       => $custom_image,
-                size_limit         => $cgi->param('size_limit'),
-                title_limit        => $cgi->param('title_limit'),
-                last_configured_by => C4::Context->userenv->{'number'},
-                use_coce => $use_coce,
-            }
-        );
+        my $custom_image = $cgi->param('custom_image') // "";
 
         my $error = q{};
-        my $yaml  = $cgi->param('mapping') . "\n\n";
-        if ( $yaml =~ /\S/ ) {
+        my $yaml  = $cgi->param('mapping');
+        if ( defined $yaml && $yaml =~ /\S/ ) {
+            $yaml  .= "\n\n";
             my $mapping;
             eval { $mapping = YAML::Load($yaml); };
             my $error = $@;
@@ -177,12 +167,25 @@ sub configure {
                     }
                 );
                 print $template->output();
+            } else {
+                $self->update_coverflow_js($mapping, $custom_image);
             }
-            else {
-                $self->update_opacuserjs($mapping, $custom_image);
-                $self->go_home();
-            }
+        } else {
+            $self->update_coverflow_js("", "");
         }
+        $self->store_data(
+            {
+                mapping            => $cgi->param('mapping') // " ",
+                coverlinks         => $coverlinks,
+                showtitle          => $showtitle,
+                custom_image       => $custom_image,
+                size_limit         => $cgi->param('size_limit') // undef,
+                title_limit        => $cgi->param('title_limit') // undef,
+                last_configured_by => C4::Context->userenv->{'number'},
+                use_coce => $use_coce
+            }
+        );
+        $self->go_home();
     }
 }
 
@@ -193,44 +196,23 @@ sub configure {
 sub install() {
     my ( $self, $args ) = @_;
 
-    my $OPACUserCSS = C4::Context->preference('OPACUserCSS');
-    $OPACUserCSS =~ s/\/\* CSS for Koha CoverFlow Plugin.*End of CSS for Koha CoverFlow Plugin \*\///gs;
-    $OPACUserCSS .= q(
-/* CSS for Koha CoverFlow Plugin 
-   This CSS was added automatically by installing the CoverFlow plugin
-   Please do not modify */
-.coverflow {
-    height:160px;
-    margin-left:25px;
-    width:850px;
+    return 1;
 }
 
-.coverflow img,.coverflow .item {
-    -moz-border-radius:10px;
-    -moz-box-shadow:0 5px 5px #777;
-    -o-border-radius:10px;
-    -webkit-border-radius:10px;
-    -webkit-box-shadow:0 5px 5px #777;
-    border-radius:10px;
-    box-shadow:0 5px 5px #777;
-    height:100%;
-    width:100%;
-}
+sub upgrade {
+    my ( $self, $args ) = @_;
 
-.itemTitle {
-    padding-top:30px;
-}
+    my $dt = dt_from_string();
+    $self->store_data( { last_upgraded => $dt->ymd('-') . ' ' . $dt->hms(':') } );
+    my $opacuserjs = C4::Context->preference('opacuserjs');
+    my $orig_oujs = $opacuserjs;
+    $opacuserjs =~ s/\/\* JS for Koha CoverFlow Plugin.*End of JS for Koha CoverFlow Plugin \*\///gs;
+    C4::Context->set_preference( 'opacuserjs', $opacuserjs ) if $opacuserjs ne $orig_oujs;
 
-.coverflow .selectedItem {
-    -moz-box-shadow:0 4px 10px #0071BC;
-    -webkit-box-shadow:0 4px 10px #0071BC;
-    border:1px solid #0071BC;
-    box-shadow:0 4px 10px #0071BC;
-}
-/* End of CSS for Koha CoverFlow Plugin */
-    );
-    C4::Context->set_preference( 'OPACUserCSS', $OPACUserCSS );
-
+    my $opacusercss = C4::Context->preference('opacusercss');
+    my $orig_oucss = $opacusercss;
+    $opacusercss =~ s/\/\* CSS for Koha CoverFlow Plugin.*End of CSS for Koha CoverFlow Plugin \*\///gs;
+    C4::Context->set_preference( 'opacusercss', $opacusercss ) if $opacusercss ne $orig_oucss;
     return 1;
 }
 
@@ -311,11 +293,54 @@ sub get_report {
     return $json_text;
 }
 
-sub update_opacuserjs {
-    my ($self, $mapping, $custom_image) = @_;
+sub opac_js {
+    my ( $self ) = @_;
+    return $self->retrieve_data('coverflow_js');
+}
 
-    my $opacuserjs = C4::Context->preference('opacuserjs');
-    $opacuserjs =~ s/\n\/\* JS for Koha CoverFlow Plugin.*End of JS for Koha CoverFlow Plugin \*\///gs;
+sub opac_head {
+    my ( $self ) = @_;
+
+    return q|
+<style>
+    /* CSS for Koha CoverFlow Plugin 
+       This CSS was added automatically by installing the CoverFlow plugin
+       Please do not modify */
+    .coverflow {
+        height:160px;
+        margin-left:25px;
+        width:850px;
+    }
+
+    .coverflow img,.coverflow .item {
+        -moz-border-radius:10px;
+        -moz-box-shadow:0 5px 5px #777;
+        -o-border-radius:10px;
+        -webkit-border-radius:10px;
+        -webkit-box-shadow:0 5px 5px #777;
+        border-radius:10px;
+        box-shadow:0 5px 5px #777;
+        height:100%;
+        width:100%;
+    }
+
+    .itemTitle {
+        padding-top:30px;
+    }
+
+    .coverflow .selectedItem {
+        -moz-box-shadow:0 4px 10px #0071BC;
+        -webkit-box-shadow:0 4px 10px #0071BC;
+        border:1px solid #0071BC;
+        box-shadow:0 4px 10px #0071BC;
+    }
+    /* End of CSS for Koha CoverFlow Plugin */
+</style>
+    |;
+}
+
+sub update_coverflow_js {
+    my ($self, $mapping, $custom_image) = @_;
 
     my $template = $self->get_template( { file => 'opacuserjs.tt' } );
     $template->param( 'mapping' => $mapping );
@@ -324,16 +349,8 @@ sub update_opacuserjs {
     my $coverflow_js = $template->output();
 
     $coverflow_js = minify( input => $coverflow_js );
+    $self->store_data({ coverflow_js => $coverflow_js });
 
-    $coverflow_js = qq|\n/* JS for Koha CoverFlow Plugin 
-   This JS was added automatically by installing the CoverFlow plugin
-   Please do not modify */|
-      . $coverflow_js
-      . q|/* End of JS for Koha CoverFlow Plugin */|;
-
-
-    $opacuserjs .= $coverflow_js;
-    C4::Context->set_preference( 'opacuserjs', $opacuserjs );
 }
 
 1;
