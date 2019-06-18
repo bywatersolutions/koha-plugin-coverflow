@@ -295,7 +295,7 @@ sub get_report {
 
 sub opac_js {
     my ( $self ) = @_;
-    return $self->retrieve_data('coverflow_js');
+    return "<script>".$self->retrieve_data('coverflow_js')."</script>";
 }
 
 sub opac_head {
