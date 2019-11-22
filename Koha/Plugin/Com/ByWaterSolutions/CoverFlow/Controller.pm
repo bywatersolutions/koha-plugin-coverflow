@@ -21,6 +21,7 @@ use Koha::Plugin::Com::ByWaterSolutions::CoverFlow;
 
 use Mojo::Base 'Mojolicious::Controller';
 use Mojo::JSON qw(decode_json);
+use Encode qw(encode_utf8);
 
 use CGI;
 use Try::Tiny;
@@ -51,13 +52,13 @@ sub get {
         $plugin->{cgi} = $cgi;
         my $template = $plugin->get_template({ file => 'report.tt' });
 
-        my $data = decode_json( Koha::Plugin::Com::ByWaterSolutions::CoverFlow::get_report(
+        my $data = decode_json( encode_utf8(Koha::Plugin::Com::ByWaterSolutions::CoverFlow::get_report(
             {
                 id         => $report_id,
                 name       => $report_name,
                 sql_params => $sql_params
             }
-        ));
+        )));
 
         my $no_image = $plugin->retrieve_data('custom_image')
         || "https://raw.githubusercontent.com/bywatersolutions/web-assets/master/NoImage.png";

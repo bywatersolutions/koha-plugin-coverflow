@@ -295,13 +295,18 @@ sub get_report {
 
 sub opac_js {
     my ( $self ) = @_;
-    return "<script>".$self->retrieve_data('coverflow_js')."</script>";
+    my $coverflow_js = $self->retrieve_data('coverflow_js');
+    return qq{
+        <script src="/api/v1/contrib/coverflow/static/jquery-flipster/jquery.flipster.min.js"></script>
+        <script>$coverflow_js</script>
+    };
 }
 
 sub opac_head {
     my ( $self ) = @_;
 
     return q|
+<link id='flipster-css' href='/api/v1/contrib/coverflow/static/jquery-flipster/jquery.flipster.min.css' type='text/css' rel='stylesheet' />
 <style>
     /* CSS for Koha CoverFlow Plugin 
        This CSS was added automatically by installing the CoverFlow plugin
