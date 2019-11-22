@@ -1,8 +1,8 @@
 $(document).ready(function () {
-    $.getScript("/plugin/Koha/Plugin/Com/ByWaterSolutions/CoverFlow/bower_components/jquery-flipster/dist/jquery.flipster.min.js", function (data, textStatus, jqxhr) {
-        $("head").append("<link id='flipster-css' href='/plugin/Koha/Plugin/Com/ByWaterSolutions/CoverFlow/bower_components/jquery-flipster/dist/jquery.flipster.min.css' type='text/css' rel='stylesheet' />");
+    $.getScript("/api/v1/contrib/coverflow/static/jquery-flipster/jquery.flipster.min.js", function (data, textStatus, jqxhr) {
+        $("head").append("<link id='flipster-css' href='/api/v1/contrib/coverflow/static/jquery-flipster/jquery.flipster.min.css' type='text/css' rel='stylesheet' />");
         [% FOREACH m IN mapping %]
-            $('[% m.selector %]').load("/coverflow.pl?id=[% m.id %][% FOREACH param IN m.params %]&sql_params=[% param %][% END %]", function () {
+            $('[% m.selector %]').load("/api/v1/contrib/coverflow/reports/[% m.id %][% FOREACH param IN m.params %]&sql_params=[% param %][% END %]", function () {
                     $('.koha-coverflow img').on("load", function(){
                     if ( this.naturalHeight == 1 ) {
                         $(this).attr("src", [% IF (custom_image) %]"[% custom_image %]")[% ELSE %]"https://raw.githubusercontent.com/bywatersolutions/web-assets/master/NoImage.png")[% END%];
