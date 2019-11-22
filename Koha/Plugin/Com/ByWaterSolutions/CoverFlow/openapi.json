@@ -1,0 +1,50 @@
+{
+  "/reports/{report_id}": {
+    "get": {
+      "x-mojo-to": "Com::ByWaterSolutions::CoverFlow::Controller#get",
+      "operationId": "GetCoverFlowReport",
+      "tags": ["opac"],
+      "parameters": [
+        {
+          "description": "Internal ID of the report to be used",
+          "in": "path",
+          "name": "report_id",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "description": "Report name",
+          "in": "query",
+          "name": "name",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "description": "SQL report params, +-separated",
+          "in": "query",
+          "name": "sql_params",
+          "required": false,
+          "type": "array",
+          "collectionFormat": "multi"
+        }
+      ],
+      "produces": [
+        "text/html"
+      ],
+      "responses": {
+        "200": {
+          "description": "A report HTML"
+        },
+        "400": {
+          "description": "Bad request"
+        },
+        "403": {
+          "description": "Permission denied"
+        },
+        "500": {
+          "description": "Internal server error"
+        }
+      }
+    }
+  }
+}
