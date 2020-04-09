@@ -7,6 +7,7 @@ use Modern::Perl;
 
 ## Required for all plugins
 use base qw(Koha::Plugins::Base);
+use Template;
 
 # This block allows us to load external modules stored within the plugin itself
 # In this case it's Template::Plugin::Filter::Minify::JavaScript/CSS and deps
@@ -213,7 +214,13 @@ sub upgrade {
     my $orig_oucss = $opacusercss;
     $opacusercss =~ s/\/\* CSS for Koha CoverFlow Plugin.*End of CSS for Koha CoverFlow Plugin \*\///gs;
     C4::Context->set_preference( 'opacusercss', $opacusercss ) if $opacusercss ne $orig_oucss;
+
+    my $mapping = $self->retrieve_data('mapping');
+    my $custom_image = $self->retrieve_data('custom_image');
+    $self->update_coverflow_js( $mapping, $custom_image );
+
     return 1;
+
 }
 
 ## This method will be run just before the plugin files are deleted
@@ -347,12 +354,19 @@ sub opac_head {
 sub update_coverflow_js {
     my ($self, $mapping, $custom_image) = @_;
 
-    my $template = $self->get_template( { file => 'opacuserjs.tt' } );
-    $template->param( 'mapping' => $mapping );
-    $template->param( 'custom_image' => $custom_image );
+    my $pluginsdir = C4::Context->config('pluginsdir');
+    my @pluginsdir = ref($pluginsdir) eq 'ARRAY' ? @$pluginsdir : $pluginsdir;
+    my @plugindirs;
+    foreach my $plugindir ( @pluginsdir ){
+            $plugindir .= "/Koha/Plugin/Com/ByWaterSolutions/CoverFlow";
+            push @plugindirs, $plugindir
+    }
+    my $template = Template->new({
+        INCLUDE_PATH => \@plugindirs
+    });
 
-    my $coverflow_js = $template->output();
-
+    my $coverflow_js;
+    $template->process('opacuserjs.tt',{ mapping => $mapping, custom_image => $custom_image}, \$coverflow_js);
     $coverflow_js = minify( input => $coverflow_js );
     $self->store_data({ coverflow_js => $coverflow_js });
 
