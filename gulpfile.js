@@ -1,4 +1,5 @@
 const gulp = require('gulp');
+const release = require('gulp-github-release');
 const fs = require('fs');
 const run = require('gulp-run');
 const dateTime = require('node-datetime');
