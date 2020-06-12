@@ -216,7 +216,7 @@ sub upgrade {
     C4::Context->set_preference( 'opacusercss', $opacusercss ) if $opacusercss ne $orig_oucss;
 
     my $mapping = $self->retrieve_data('mapping');
-    my $custom_image = $self->retrieve_data('custom_image');.
+    my $custom_image = $self->retrieve_data('custom_image');
     eval { $mapping = YAML::Load($mapping); };
     $self->update_coverflow_js( $mapping, $custom_image );
 
