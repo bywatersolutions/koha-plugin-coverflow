@@ -153,4 +153,15 @@ gulp release
 
 The first will create the kpz, the second will create a new release on the github repoisitory and attach the kpz created above
 
+# Troubleshooting
 
+Did you restart plack after installation? The plugin adds files and plugin routes, currently Koha needs a plack restart to pick these changes up
+
+Check that the API routes are listed in the spec:
+http://koha.host.name/api/v1/.html
+You should see:
+GET /api/v1/contrib/coverflow/reports/{report_id} 
+GET /api/v1/contrib/coverflow/static/jquery-flipster/jquery.flipster.min.js
+GET /api/v1/contrib/coverflow/static/jquery-flipster/jquery.flipster.min.css 
+
+Hit those API endpoints and ensure that you can access them.
