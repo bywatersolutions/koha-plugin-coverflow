@@ -68,31 +68,11 @@ The third plugin configuration is a single text area that uses YAML ( actually, 
 
 In this example, we are telling the plugin to use the report with id 42, and use it to create a coverflow widget to replace the HTML element with the id “coverflow”. The options list is passed directly to Flipster, so any options supported by Flipster can be set from the plugin configuration. `style` may be set to `'coverflow'`, `'carousel'`, `'wheel'` or `'flat'`; see the [jQuery Flipster demo](http://brokensquare.com/Code/jquery-flipster/demo/) for examples of each.
 
-At the time the plugins options are saved or updated, the plugin will then generate some minified JavaScript code that is automatically stored in the Koha system preference OpacUserJS. Here is an example of the output:
-
-```
-/* JS for Koha CoverFlow Plugin 
- This JS was added automatically by installing the CoverFlow plugin
- Please do not modify */$(document).ready(function(){$.getScript("/plugin/Koha/Plugin/Com/ByWaterSolutions/CoverFlow/jquery-flipster/src/js/jquery.flipster.min.js",function(data,textStatus,jqxhr){$("head").append("<link id='flipster-css' href='/plugin/Koha/Plugin/Com/ByWaterSolutions/CoverFlow/jquery-flipster/src/css/jquery.flipster.min.css' type='text/css' rel='stylesheet' />");$('#coverflow').load("/coverflow.pl?id=42",function(){var opt={'items':'.item','minfactor':15,'distribution':1.5,'scalethreshold':0,'staticbelowthreshold':false,'titleclass':'itemTitle','selectedclass':'selectedItem','scrollactive':true,'step':{'limit':4,'width':10,'scale':true}};$('#coverflow').flipster({style:'coverflow',});});});});
-/* End of JS for Koha CoverFlow Plugin */
-```
+The coverflow plugin now utilizes plugin helper methods to inject the necessary javascript into the opac - the plugin should remove any previously saved JS from the OpacUserJS preference.
 
 Why do this? For speed! Rather than regenerating this code each and every time the page loads, we can generate it once, and use it over and over again.
 
-If you inspect the code closely, you’ll notice it references a script “coverflow.pl”. This is a script that is included with the coverflow plugin. Since we need to access this from the OPAC ( and we don’t want to set off any XSS attack alarms ), we need to modify the web server configuration for the public catalog and add the followup to it:
-
-```
-ScriptAlias /coverflow.pl "/var/lib/koha/mykoha/plugins/Koha/Plugin/Com/ByWaterSolutions/CoverFlow/coverflow.pl"
-Alias /plugin "/var/lib/koha/mykoha/plugins"
-# The stanza below is needed for Apache 2.4+
-<Directory /var/lib/koha/mykoha/plugins>
-      Options Indexes FollowSymLinks
-      AllowOverride None
-      Require all granted
-</Directory>
-```
-
-This line gives us access to the coverflow.pl script from the OPAC. This script retrieves the report data and passes it back to the public catalog for creating the coverflow widget. Koha::Cache is supported in order to make the widget load as quickly as possible!
+The coverflow now uses an injected API route to build the needed code, you should not need to make any changes to the Apache configuration as in previous versions. You will need to restart plack after plugin installation in order to build the new API routes
 
 The final step is to put your selector element somewhere in your public catalog. In this example, I put the following in the system preference OpacMainUserBlock:
 
