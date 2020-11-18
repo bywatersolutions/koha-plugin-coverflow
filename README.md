@@ -28,7 +28,8 @@ Once the plugin is installed you can find it under Admin->Manage plugins, curren
 The steps to get your coverflow to show up are as follows:
 
 First, you need to create one or more public reports for your coverflow widget or widgets to be based on. This is how the plugin knows what the content of your widget should contain. Each report needs only three columns; title, biblionumber, and isbn. It is important that you have a good and valid isbn, as that is the datum used to actually fetch the cover. Example finding items added in the last 30 days:
-```
+
+```SQL
 SELECT b.biblionumber, SUBSTRING_INDEX(m.isbn, ' ', 1) AS isbn, b.title
   FROM items i
   LEFT JOIN biblioitems m USING (biblioitemnumber)
@@ -43,14 +44,15 @@ SELECT b.biblionumber, SUBSTRING_INDEX(m.isbn, ' ', 1) AS isbn, b.title
 In this iteration of the plugin, we are using Amazon cover images, a future development would be to make the cover image fetcher configurable so we can use any data source for cover image fetching. **Coce has been added as experimental cover source feel free to test using URL https://coce.bywatersolutions.com**
 
 Note: You can add an additional column 'localcover' - this should be blank if the biblio doesn't have a localcover and can contain any other data if it does. If this column is populated a local cover will be used. Example below:
-```
+
+```SQL
 SELECT DISTINCT biblio.title, biblio.biblionumber,  SUBSTRING_INDEX(biblioitems.isbn, ' ', 1) AS isbn, c.imagenumber AS localcover 
 FROM items 
 LEFT JOIN biblioitems USING (biblioitemnumber) 
 LEFT JOIN biblio ON (items.biblionumber=biblio.biblionumber)
 LEFT JOIN biblioimages c ON (items.biblionumber=c.biblionumber)
 WHERE biblioitems.isbn IS NOT NULL AND biblioitems.isbn !=''
-ORDER  BY RAND() 
+ORDER  BY RAND()
 LIMIT  15
 ```
 
@@ -59,14 +61,21 @@ The first option is whether to use coverimages as the links to the biblios, and 
 The second option is whether to use a custom image for titles where no cover is found. THis should be a full URL to your image.
 The third plugin configuration is a single text area that uses YAML ( actually, it’s JSON, whcih is a subset of YAML ) to store the configuration options. In this example it looks like this:
 
-```
+```YAML
+---
 - id: 42
-  selector: #coverflow
+  selector: "#coverflow"
   options:
   style: coverflow
+- id: 42
+  selector: ".coverflow_class"
+  options:
+  style: flat
 ```
 
-In this example, we are telling the plugin to use the report with id 42, and use it to create a coverflow widget to replace the HTML element with the id “coverflow”. The options list is passed directly to Flipster, so any options supported by Flipster can be set from the plugin configuration. `style` may be set to `'coverflow'`, `'carousel'`, `'wheel'` or `'flat'`; see the [jQuery Flipster demo](http://brokensquare.com/Code/jquery-flipster/demo/) for examples of each.
+In this example, we are telling the plugin to use the report with _id_ 42, and use it to create a coverflow widget to replace the HTML element with the _coverflow_ **id** (Note that the selector is quoted, as _#_ is technically a comment in YAML). The options list is passed directly to Flipster, so any options supported by Flipster can be set from the plugin configuration. `style` may be set to `'coverflow'`, `'carousel'`, `'wheel'` or `'flat'`; see the [jQuery Flipster demo](http://brokensquare.com/Code/jquery-flipster/demo/) for examples of each.
+
+In the example, there's a second setting, that will apply to the *.coverflow_class* **class**.
 
 The coverflow plugin now utilizes plugin helper methods to inject the necessary javascript into the opac - the plugin should remove any previously saved JS from the OpacUserJS preference.
 
@@ -76,14 +85,15 @@ The coverflow now uses an injected API route to build the needed code, you shoul
 
 The final step is to put your selector element somewhere in your public catalog. In this example, I put the following in the system preference OpacMainUserBlock:
 
-```
+```HTML
 <span id="coverflow">Loading...</span>
 ```
 
 Once that is in place, you need only refresh your OPAC page, and there you have it, your very own catalog coverflow widget! Not only do these coverflows look great on a computer screen, but they look great on mobile platforms as well, and are even touch responsive!
 # Report with parameters
 It is now possible to use reports that take input. For example,in a multibranchsystem you can setup a single report as below:
-```
+
+```SQL
 SELECT b.biblionumber, SUBSTRING_INDEX(m.isbn, ' ', 1) AS isbn, b.title
   FROM items i
   LEFT JOIN biblioitems m USING (biblioitemnumber)
@@ -95,16 +105,19 @@ SELECT b.biblionumber, SUBSTRING_INDEX(m.isbn, ' ', 1) AS isbn, b.title
   ORDER BY rand()
   LIMIT 30
 ```
+
 Then in the plugin configuration you can use thismultiple times:
-```
+
+```YAML
+---
 - id: 42
-  selector: #coverflow1
+  selector: "#coverflow1"
   params:
     - BRANCHA
   options:
     style: coverflow
 - id: 42
-  selector: #coverflow2
+  selector: "#coverflow2"
   params:
     - BRANCHB
   options:
