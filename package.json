@@ -1,7 +1,7 @@
 {
   "name": "koha-coverflow-plugin",
-  "version": "2.4.37",
-  "previous_version": "2.4.36",
+  "version": "2.4.38",
+  "previous_version": "2.4.37",
   "description": "Koha CoverFlow Plugin",
   "main": "index.js",
   "dependencies": {
