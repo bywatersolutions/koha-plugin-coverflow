@@ -366,6 +366,12 @@ sub update_coverflow_js {
         INCLUDE_PATH => \@plugindirs
     });
 
+    foreach my $setting ( @{$mapping} ) {
+        foreach my $param ( @{ $setting->{params} } ) {
+            push @{ $setting->{sql_params} }, "sql_params=$param";
+        }
+    }
+
     my $coverflow_js;
     $template->process('opacuserjs.tt',{ mapping => $mapping, custom_image => $custom_image}, \$coverflow_js);
     $coverflow_js = minify( input => $coverflow_js );

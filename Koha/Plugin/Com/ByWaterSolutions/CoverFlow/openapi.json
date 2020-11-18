@@ -25,6 +25,9 @@
           "name": "sql_params",
           "required": false,
           "type": "array",
+          "items": {
+            "type": "string"
+          },
           "collectionFormat": "multi"
         }
       ],

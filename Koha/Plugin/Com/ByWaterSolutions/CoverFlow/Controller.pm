@@ -43,7 +43,7 @@ sub get {
 
     my $report_id   = $c->validation->param('report_id');
     my $report_name = $c->validation->param('name');
-    my $sql_params  = $c->validation->param('sql_params') // [];
+    my $sql_params  = $c->validation->every_param('sql_params');
 
     return try {
         # We need this weird hack until the plugin subsystem is not CGI-oriented

@@ -1,6 +1,10 @@
 $(document).ready(function () {
     [% FOREACH m IN mapping %]
-        $('[% m.selector %]').load("/api/v1/contrib/coverflow/reports/[% m.id %][% FOREACH param IN m.params %]&sql_params=[% param %][% END %]", function () {
+        [% IF m.sql_params.size > 0 %]
+            $('[% m.selector %]').load("/api/v1/contrib/coverflow/reports/[% m.id | uri %]?[% m.sql_params.join('&') %]", function () {
+        [% ELSE %]
+            $('[% m.selector %]').load("/api/v1/contrib/coverflow/reports/[% m.id | uri %]", function () {
+        [% END %]
                 $('.koha-coverflow img').on("load", function(){
                 if ( this.naturalHeight == 1 ) {
                     $(this).attr("src", [% IF (custom_image) %]"[% custom_image %]")[% ELSE %]"https://raw.githubusercontent.com/bywatersolutions/web-assets/master/NoImage.png")[% END%];
