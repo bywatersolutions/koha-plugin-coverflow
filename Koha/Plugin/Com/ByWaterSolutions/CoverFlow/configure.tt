@@ -1,3 +1,5 @@
+[% USE raw %]
+[% USE Asset %]
 [% INCLUDE 'doc-head-open.inc' %]
  <title>Koha: Cover Flow Plugin: Configuration</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -15,6 +17,10 @@ $(document).ready(function() {
 });
 
 </script>
+
+[% Asset.js( "lib/codemirror/codemirror.min.js" ) | $raw %]
+[% Asset.css("lib/codemirror/codemirror.min.css") | $raw %]
+[% Asset.css("lib/codemirror/lint.min.css") | $raw %]
 
 </head>
 <body>
@@ -68,7 +74,7 @@ $(document).ready(function() {
 
         <fieldset id="image options">
             <legend>Mapping</legend>
-            <textarea rows="15" cols="150" name="mapping">[% mapping %]</textarea>
+            <textarea rows="15" cols="150" name="mapping" id="mapping">[% mapping %]</textarea>
         </fieldset>
 
         <fieldset id="instructions">
@@ -100,5 +106,22 @@ $(document).ready(function() {
 
         <input type="submit" value="Save configuration" />
     </form>
+
+    [% Asset.js( "lib/codemirror/yaml.min.js" ) | $raw %]
+    [% Asset.js( "lib/codemirror/lint.min.js" ) | $raw %]
+    [% Asset.js( "lib/linters/js-yaml.min.js" ) | $raw %]
+    [% Asset.js( "lib/codemirror/yaml-lint.min.js" ) | $raw %]
+
+    <script>
+        $( document ).ready( function () {
+            var editor = CodeMirror.fromTextArea( document.getElementById( "mapping" ), {
+                lineNumbers: true,
+                mode: 'text/x-yaml',
+                lineWrapping: false,
+                gutters: ["CodeMirror-lint-markers"],
+                lint: true
+            });
+        });
+    </script>
 
 [% INCLUDE 'intranet-bottom.inc' %]
