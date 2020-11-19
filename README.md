@@ -27,7 +27,9 @@ Once the plugin is installed you can find it under Admin->Manage plugins, curren
 
 The steps to get your coverflow to show up are as follows:
 
-First, you need to create one or more public reports for your coverflow widget or widgets to be based on. This is how the plugin knows what the content of your widget should contain. Each report needs only three columns; title, biblionumber, and isbn. It is important that you have a good and valid isbn, as that is the datum used to actually fetch the cover. Example finding items added in the last 30 days:
+## Generate a public report
+
+First, you need to create one or more **public** reports for your coverflow widget or widgets to be based on. This is how the plugin knows what the content of your widget should contain. Each report needs only three columns; title, biblionumber, and isbn. It is important that you have a good and valid isbn, as that is the datum used to actually fetch the cover. Example finding items added in the last 30 days:
 
 ```SQL
 SELECT b.biblionumber, SUBSTRING_INDEX(m.isbn, ' ', 1) AS isbn, b.title
@@ -56,7 +58,8 @@ ORDER  BY RAND()
 LIMIT  15
 ```
 
-Second, we need to configure the plugin. 
+## Configure the plugin
+
 The first option is whether to use coverimages as the links to the biblios, and whether or not to display titles under images if so.
 The second option is whether to use a custom image for titles where no cover is found. THis should be a full URL to your image.
 The third plugin configuration is a single text area that uses YAML ( actually, it’s JSON, whcih is a subset of YAML ) to store the configuration options. In this example it looks like this:
@@ -124,6 +127,31 @@ Then in the plugin configuration you can use thismultiple times:
     style: coverflow
 ```
 
+# Troubleshooting
+
+Did you restart plack after installation? The plugin adds files and plugin routes, currently Koha needs
+a plack restart to pick these changes up. You can do it by running:
+
+```Shell
+sudo systemctl restart memcached koha-common apache2
+```
+
+Check that the API routes are listed in the spec:
+
+```
+http://koha.host.name/api/v1/.html
+```
+
+You should see:
+
+```
+GET /api/v1/contrib/coverflow/reports/{report_id}
+GET /api/v1/contrib/coverflow/static/jquery-flipster/jquery.flipster.min.js
+GET /api/v1/contrib/coverflow/static/jquery-flipster/jquery.flipster.min.css
+```
+
+Hit those API endpoints and ensure that you can access them.
+
 # Build and release
 
 To use the new release functionality you must first install node/npm - these worked well for me:
@@ -145,16 +173,3 @@ gulp build
 gulp release
 
 The first will create the kpz, the second will create a new release on the github repoisitory and attach the kpz created above
-
-# Troubleshooting
-
-Did you restart plack after installation? The plugin adds files and plugin routes, currently Koha needs a plack restart to pick these changes up
-
-Check that the API routes are listed in the spec:
-http://koha.host.name/api/v1/.html
-You should see:
-GET /api/v1/contrib/coverflow/reports/{report_id} 
-GET /api/v1/contrib/coverflow/static/jquery-flipster/jquery.flipster.min.js
-GET /api/v1/contrib/coverflow/static/jquery-flipster/jquery.flipster.min.css 
-
-Hit those API endpoints and ensure that you can access them.
