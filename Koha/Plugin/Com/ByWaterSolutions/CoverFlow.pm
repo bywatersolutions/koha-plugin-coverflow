@@ -51,7 +51,7 @@ our $metadata = {
     description     => 'Convert a report into a coverflow style widget!',
     date_authored   => '2014-06-29',
     date_updated    => '1900-01-01',
-    minimum_version => '18.11',
+    minimum_version => '19.05',
     maximum_version => undef,
     version         => $VERSION,
 };
