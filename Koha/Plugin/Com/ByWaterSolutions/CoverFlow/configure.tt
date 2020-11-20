@@ -84,14 +84,15 @@ $(document).ready(function() {
                 <br/>Note: The plugin uses YAML syntax to read the mapping, spaces matter! :-)
                 <br/>Example mapping with two coverflows:<br/><br/>
                 <pre>
-    - id: 1
-      selector: #coverflow
-    - id: 2
-      selector: .random
-      options:
-        buttons: true
-        autoplay: 4000
-        loop: true
+---
+- id: 5
+  selector: #coverflow
+- id: 8
+  selector: .random
+  options:
+  buttons: true
+  autoplay: 4000
+  loop: true
                 </pre>
 
                 <p>Would replace an element with the id 'coverflow' with a coverflow widget using the Koha report with an id of 5, and also replace any element with a class of 'random' with a coverflow widget based on the Koha report with the id 8. The second coverflow would auto scroll through the covers with a 4 second delay and loop when reaching the end</p>
