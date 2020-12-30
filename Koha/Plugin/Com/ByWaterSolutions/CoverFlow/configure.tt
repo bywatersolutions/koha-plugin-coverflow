@@ -81,14 +81,14 @@ $(document).ready(function() {
             <legend>Setup instructions</legend>
             <div>
                 In the above 'Mapping box' add a section for each coverflow. Begin with the report # as the ID, then specify the jQuery selector for the html element you'd like to replace with the coverflow. You can also specify an 'options' section (indented) with additional coverflow settings which are documented <a href="https://github.com/drien/jquery-flipster/blob/master/README.md">here</a>
-                <br/>Note: The plugin uses YAML syntax to read the mapping, spaces matter! :-)
+                <br/>Note: The plugin uses YAML syntax to read the mapping, spaces matter! :-) When using an id tag the # ust be quoted so that it is not interpreted as a YAML comment
                 <br/>Example mapping with two coverflows:<br/><br/>
                 <pre>
 ---
 - id: 5
-  selector: #coverflow
+  selector: "#coverflow"
 - id: 8
-  selector: .random
+  selector: ".random"
   options:
   buttons: true
   autoplay: 4000
