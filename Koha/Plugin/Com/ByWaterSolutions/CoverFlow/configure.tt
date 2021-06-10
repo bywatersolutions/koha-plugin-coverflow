@@ -98,6 +98,8 @@ $(document).ready(function() {
                 <p>Would replace an element with the id 'coverflow' with a coverflow widget using the Koha report with an id of 5, and also replace any element with a class of 'random' with a coverflow widget based on the Koha report with the id 8. The second coverflow would auto scroll through the covers with a 4 second delay and loop when reaching the end</p>
 
                 <p>Finally, add your target element such as <i>[% FILTER html %]<div id="coverflow"></div>[% END %]</i> to an OPAC system codeference such as OpacMainUserBlock. Position the element where you would like your coverflow widget to appear!</p>
+                
+                <p>Note: You can add an additional column 'localcover' - this should be blank if the biblio doesn't have a localcover and can contain any other data if it does. If this column is populated a local cover will be used.</p>
             </div>
         </fieldset>
 
