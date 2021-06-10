@@ -1,4 +1,3 @@
-[% USE Koha %]
 <div class="koha-coverflow" [% IF (use_coce) %]style="min-height: 200px"[% END %]>
     <ul>
         [% FOREACH d IN data %]
@@ -53,7 +52,7 @@
 [% IF (use_coce) %]
 <script type="text/javascript" src="/opac-tmpl/bootstrap/js/coce.js"></script>
 <script type="text/javascript">
-      KOHA.coce.getURL('[% Koha.Preference('CoceHost') %]', '[% Koha.Preference('CoceProviders') %]',[% Koha.Preference('OPACURLOpenInNewWindow') %]);
+      KOHA.coce.getURL('[% CoceHost %]', '[% CoceProviders %]',[% OPACURLOpenInNewWindow %]);
 </script>
 [% END %]
 

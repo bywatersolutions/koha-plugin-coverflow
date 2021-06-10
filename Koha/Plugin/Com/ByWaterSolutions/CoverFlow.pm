@@ -151,8 +151,12 @@ sub configure {
         if ( defined $yaml && $yaml =~ /\S/ ) {
             $yaml  .= "\n\n";
             my $mapping;
-            eval { $mapping = YAML::Load($yaml); };
-            my $error = $@;
+            if ( C4::Context->preference('Version') ge '20.120000' ) {
+                eval { $mapping = YAML::XS::Load($yaml); };
+            } else {
+                eval { $mapping = YAML::Load($yaml); };
+            }
+            $error = $@;
             if ($error) {
                 my $template =
                   $self->get_template( { file => 'configure.tt' } );
@@ -217,7 +221,11 @@ sub upgrade {
 
     my $mapping = $self->retrieve_data('mapping');
     my $custom_image = $self->retrieve_data('custom_image');
-    eval { $mapping = YAML::Load($mapping); };
+    if ( C4::Context->preference('Version') ge '20.120000' ) {
+        eval { $mapping = YAML::XS::Load($mapping); };
+    } else {
+        eval { $mapping = YAML::Load($mapping); };
+    }
     $self->update_coverflow_js( $mapping, $custom_image );
 
     return 1;

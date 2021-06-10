@@ -17,13 +17,14 @@ package Koha::Plugin::Com::ByWaterSolutions::CoverFlow::Controller;
 
 use Modern::Perl;
 
+use C4::Context;
 use Koha::Plugin::Com::ByWaterSolutions::CoverFlow;
 
 use Mojo::Base 'Mojolicious::Controller';
 use Mojo::JSON qw(decode_json);
 use Encode qw(encode_utf8);
+use Template;
 
-use CGI;
 use Try::Tiny;
 
 =head1 Koha::Plugin::Com::ByWaterSolutions::CoverFlow::Controller
@@ -47,10 +48,7 @@ sub get {
 
     return try {
         # We need this weird hack until the plugin subsystem is not CGI-oriented
-        my $cgi = CGI->new;
         my $plugin   = Koha::Plugin::Com::ByWaterSolutions::CoverFlow->new();
-        $plugin->{cgi} = $cgi;
-        my $template = $plugin->get_template({ file => 'report.tt' });
 
         my $data = decode_json( encode_utf8(Koha::Plugin::Com::ByWaterSolutions::CoverFlow::get_report(
             {
@@ -63,7 +61,9 @@ sub get {
         my $no_image = $plugin->retrieve_data('custom_image')
         || "https://raw.githubusercontent.com/bywatersolutions/web-assets/master/NoImage.png";
 
-        $template->param(
+        my $template = Template->new({INCLUDE_PATH => join(':',@INC)});
+        my $content;
+        my $params = {
             data        => $data,
             coverlinks  => $plugin->retrieve_data('coverlinks'),
             showtitle   => $plugin->retrieve_data('showtitle'),
@@ -71,11 +71,15 @@ sub get {
             title_limit => $plugin->retrieve_data('title_limit'),
             use_coce    => $plugin->retrieve_data('use_coce'),
             no_image    => $no_image,
-        );
+            CoceHost    => C4::Context->preference('CoceHost'),
+            CoceProviders => C4::Context->preference('CoceProviders'),
+            OPACURLOpenInNewWindow => C4::Context->preference('OPACURLOpenInNewWindow'),
+        };
+        $template->process( 'Koha/Plugin/Com/ByWaterSolutions/CoverFlow/report.tt',$params,\$content);
 
         return $c->render(
             status => 200,
-            text   => $template->output()
+            text   => $content
         );
     }
     catch {
