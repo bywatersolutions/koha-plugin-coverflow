@@ -99,7 +99,29 @@ $(document).ready(function() {
 
                 <p>Finally, add your target element such as <i>[% FILTER html %]<div id="coverflow"></div>[% END %]</i> to an OPAC system codeference such as OpacMainUserBlock. Position the element where you would like your coverflow widget to appear!</p>
                 
-                <p>Note: You can add an additional column 'localcover' - this should be blank if the biblio doesn't have a localcover and can contain any other data if it does. If this column is populated a local cover will be used.</p>
+                <p>Example finding items added in the last 30 days:</p>
+                <pre>
+                SELECT b.biblionumber, SUBSTRING_INDEX(m.isbn, ' ', 1) AS isbn, b.title
+                FROM items i
+                LEFT JOIN biblioitems m USING (biblioitemnumber)
+                LEFT JOIN biblio b ON (i.biblionumber=b.biblionumber)
+                WHERE DATE_SUB(CURDATE(),INTERVAL 30 DAY) <= i.dateaccessioned AND m.isbn IS NOT NULL AND m.isbn != ''
+                GROUP BY biblionumber
+                HAVING isbn != ""
+                ORDER BY rand()
+                LIMIT 30
+                </pre>
+                <p>Note: You can add an additional column named 'localcover' to your report - this should be blank if the biblio doesn't have a localcover and can contain any other data if it does. If this column is populated a local cover will be used. Example below:</p>
+                <pre>
+                SELECT DISTINCT biblio.title, biblio.biblionumber,  SUBSTRING_INDEX(biblioitems.isbn, ' ', 1) AS isbn, c.imagenumber AS localcover 
+                FROM items 
+                LEFT JOIN biblioitems USING (biblioitemnumber) 
+                LEFT JOIN biblio ON (items.biblionumber=biblio.biblionumber)
+                LEFT JOIN biblioimages c ON (items.biblionumber=c.biblionumber)
+                WHERE biblioitems.isbn IS NOT NULL AND biblioitems.isbn !=''
+                ORDER  BY RAND()
+                LIMIT  15
+                </pre>
             </div>
         </fieldset>
 
