@@ -90,9 +90,9 @@ $(document).ready(function() {
 - id: 8
   selector: ".random"
   options:
-  buttons: true
-  autoplay: 4000
-  loop: true
+    buttons: true
+    autoplay: 4000
+    loop: true
                 </pre>
 
                 <p>Would replace an element with the id 'coverflow' with a coverflow widget using the Koha report with an id of 5, and also replace any element with a class of 'random' with a coverflow widget based on the Koha report with the id 8. The second coverflow would auto scroll through the covers with a 4 second delay and loop when reaching the end</p>
