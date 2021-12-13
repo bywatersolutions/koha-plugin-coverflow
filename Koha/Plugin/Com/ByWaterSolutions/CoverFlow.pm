@@ -31,7 +31,7 @@ BEGIN {
 use C4::Context;
 use C4::Members;
 use C4::Auth;
-use C4::Reports::Guided;
+use C4::Reports::Guided qw( execute_query );;
 use MARC::Record;
 use C4::Koha qw(GetNormalizedISBN);
 #use Koha::Caches; FIXME not actually being used and causes error in some version
