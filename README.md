@@ -48,14 +48,14 @@ In this iteration of the plugin, we are using Amazon cover images, a future deve
 Note: You can add an additional column 'localcover' - this should be blank if the biblio doesn't have a localcover and can contain any other data if it does. If this column is populated a local cover will be used. Example below:
 
 ```SQL
-SELECT DISTINCT biblio.title, biblio.biblionumber,  SUBSTRING_INDEX(biblioitems.isbn, ' ', 1) AS isbn, c.imagenumber AS localcover 
-FROM items 
-LEFT JOIN biblioitems USING (biblioitemnumber) 
+SELECT DISTINCT biblio.title, biblio.biblionumber, SUBSTRING_INDEX(biblioitems.isbn, ' ', 1) AS isbn, c.imagenumber AS localcover
+FROM items
+LEFT JOIN biblioitems USING (biblioitemnumber)
 LEFT JOIN biblio ON (items.biblionumber=biblio.biblionumber)
-LEFT JOIN biblioimages c ON (items.biblionumber=c.biblionumber)
+LEFT JOIN cover_images c ON (items.biblionumber=c.biblionumber)
 WHERE biblioitems.isbn IS NOT NULL AND biblioitems.isbn !=''
-ORDER  BY RAND()
-LIMIT  15
+ORDER BY RAND()
+LIMIT 15;
 ```
 
 ## Configure the plugin
@@ -154,22 +154,4 @@ Hit those API endpoints and ensure that you can access them.
 
 # Build and release
 
-To use the new release functionality you must first install node/npm - these worked well for me:
-https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions
-
-Next make sure to globally install gulp:
-sudo node i gulp -g
-
-You will need to setup a github access token:
-https://help.github.com/articles/creating-an-access-token-for-command-line-use/
-
-Then export it in into an environment variable:
-export GITHUB_TOKEN={paste token here}
-
-Before releasing update the version in package.json file
-
-Then, use the commands:
-gulp build
-gulp release
-
-The first will create the kpz, the second will create a new release on the github repoisitory and attach the kpz created above
+This plugin uses Github actions for release, you can see the code in .github/workflows
