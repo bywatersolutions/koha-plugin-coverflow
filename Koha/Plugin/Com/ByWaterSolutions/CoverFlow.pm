@@ -288,8 +288,17 @@ sub get_report {
         # convert SQL parameters to placeholders
         $sql =~ s/(<<.*?>>)/\?/g;
 
-        my ( $sth, $errors ) =
-          execute_query( $sql, $offset, $limit, $sql_params );
+        my ( $sth, $errors );
+        if ( C4::Context->preference('Version') ge '21.110000' ) {
+            ( $sth, $errors ) = execute_query({
+                sql => $sql,
+                offset => $offset,
+                limit => $limit,
+                sql_params => $sql_params
+            });
+        } else {
+            ( $sth, $errors ) = execute_query( $sql, $offset, $limit, $sql_params );
+        }
         if ($sth) {
             my $lines;
             $lines = $sth->fetchall_arrayref( {} );
