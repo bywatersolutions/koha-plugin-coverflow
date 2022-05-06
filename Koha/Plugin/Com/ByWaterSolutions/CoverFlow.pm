@@ -38,7 +38,7 @@ use C4::Koha qw(GetNormalizedISBN);
 use JSON;
 use Business::ISBN;
 use JavaScript::Minifier qw(minify);
-use Koha::DateUtils;
+use Koha::DateUtils qw(dt_from_string);
 
 
 ## Here we set our plugin version
