@@ -289,7 +289,7 @@ sub get_report {
         $sql =~ s/(<<.*?>>)/\?/g;
 
         my ( $sth, $errors );
-        if ( C4::Context->preference('Version') ge '21.110000' ) {
+        if ( C4::Context->preference('Version') ge '21.110500' ) {
             ( $sth, $errors ) = execute_query({
                 sql => $sql,
                 offset => $offset,
