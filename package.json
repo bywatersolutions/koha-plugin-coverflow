@@ -10,7 +10,7 @@
     "node-datetime": "^2.0.0"
   },
   "devDependencies": {
-    "gulp": "^3.9.1",
+    "gulp": "^4.0.2",
     "gulp-cli": "^1.2.2",
     "gulp-github-release": "^1.1.5",
     "gulp-replace": "^0.5.4",
