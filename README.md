@@ -19,7 +19,7 @@ To set up the Koha plugin system you must first make some changes to your instal
 * Restart your webserver
 * Restart memcached if you are using it
 
-Once set up is complete you will need to alter your UseKohaPlugins system preference. On the Tools page you will see the Tools Plugins and on the Reports page you will see the Reports Plugins.
+On the Tools page you will see the Tools Plugins and on the Reports page you will see the Reports Plugins.
 
 # Setup
 
