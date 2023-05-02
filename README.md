@@ -93,6 +93,21 @@ The final step is to put your selector element somewhere in your public catalog.
 ```
 
 Once that is in place, you need only refresh your OPAC page, and there you have it, your very own catalog coverflow widget! Not only do these coverflows look great on a computer screen, but they look great on mobile platforms as well, and are even touch responsive!
+
+# Coverflow slider populated by a list
+
+You can write your SQL report to access the contents of a list. In the example below, replace the shelfnumber with the ID of your chosen list:
+
+```SQL
+SELECT biblionumber, SUBSTRING_INDEX(isbn, ' ', 1) AS isbn, title
+  FROM virtualshelfcontents
+  LEFT JOIN biblioitems USING (biblionumber)
+  LEFT JOIN biblio USING (biblionumber)
+  WHERE shelfnumber=721
+  ORDER BY rand()
+  LIMIT 50
+```
+
 # Report with parameters
 It is now possible to use reports that take input. For example,in a multibranchsystem you can setup a single report as below:
 
