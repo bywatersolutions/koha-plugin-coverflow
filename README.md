@@ -69,11 +69,11 @@ The third plugin configuration is a single text area that uses YAML ( actually, 
 - id: 42
   selector: "#coverflow"
   options:
-  style: coverflow
+    style: coverflow
 - id: 42
   selector: ".coverflow_class"
   options:
-  style: flat
+    style: flat
 ```
 
 In this example, we are telling the plugin to use the report with _id_ 42, and use it to create a coverflow widget to replace the HTML element with the _coverflow_ **id** (Note that the selector is quoted, as _#_ is technically a comment in YAML). The options list is passed directly to Flipster, so any options supported by Flipster can be set from the plugin configuration. `style` may be set to `'coverflow'`, `'carousel'`, `'wheel'` or `'flat'`; see the [jQuery Flipster demo](http://brokensquare.com/Code/jquery-flipster/demo/) for examples of each.
