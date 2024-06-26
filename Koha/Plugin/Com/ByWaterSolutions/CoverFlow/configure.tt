@@ -34,7 +34,8 @@ $(document).ready(function() {
     <img src="/api/v1/contrib/coverflow/static/artwork/logo.png" />
     <h3>Koha: Cover Flow Plugin: Configuration</h3>
     <!-- Notice our form here has no 'action', this is good, it means that our forms will always get passed back to 'plugins/run.pl'. You could hard code it instead if you prefer -->
-    <form method="get">
+    <form method="post">
+        [% INCLUDE 'csrf-token.inc' %]
         <!-- Always pass these two parameters so the plugin system knows what to execute! -->
         <input type="hidden" name="class" value="[% CLASS %]"/>
         <input type="hidden" name="method" value="[% METHOD %]"/>
