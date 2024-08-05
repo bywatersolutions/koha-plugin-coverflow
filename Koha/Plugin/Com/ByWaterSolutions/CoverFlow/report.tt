@@ -52,7 +52,7 @@
 [% IF (use_coce) %]
 <script type="text/javascript" src="/opac-tmpl/bootstrap/js/coce.js"></script>
 <script type="text/javascript">
-      KOHA.coce.getURL('[% CoceHost %]', '[% CoceProviders %]',[% OPACURLOpenInNewWindow %]);
+      KOHA.coce.getURL('[% CoceHost %]', '[% CoceProviders %]');
 </script>
 [% END %]
 
