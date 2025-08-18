@@ -10,7 +10,7 @@
                             [% ELSIF (use_coce)  %]
                                 <div style="block" title="[% d.biblionumber %]" class="[% d.isbn %]" id="coce-thumbnail-preview"></div>
                             [% ELSE %]
-                                <img [% IF size_limit %]style="max-height:[% size_limit %]px;"[% END %] src="https://images-na.ssl-images-amazon.com/images/P/[% d.isbn %].01.LZZZZZZZ.jpg" alt="Cover image for [% d.title %]" />
+                                <img [% IF size_limit %]style="max-height:[% size_limit %]px;"[% END %] src="https://images-na.ssl-images-amazon.com/images/P/[% d.isbn %].01.LZZZZZZZ.jpg" alt="Cover image for [% d.title %] by [% d.author %]" />
                             [% END %]
                         </a>
                         [% IF showtitle %]
@@ -19,11 +19,11 @@
                         [% END %]
                     [% ELSE %]
                         [% IF d.localcover %]
-                            <img [% IF size_limit %]style="max-height:[% size_limit %]px;"[% END %] src="/cgi-bin/koha/opac-image.pl?biblionumber=[% d.biblionumber %]" alt="Cover image for [% d.title %]" />
+                            <img [% IF size_limit %]style="max-height:[% size_limit %]px;"[% END %] src="/cgi-bin/koha/opac-image.pl?biblionumber=[% d.biblionumber %]" alt="Cover image for [% d.title %] by [% d.author %]" />
                         [% ELSIF (use_coce)  %]
                              <div style="block" title="[% d.biblionumber %]" class="[% d.isbn %]" id="coce-thumbnail-preview"></div>
                         [% ELSE %]
-                            <img [% IF size_limit %]style="max-height:[% size_limit %]px;"[% END %] src="https://images-na.ssl-images-amazon.com/images/P/[% d.isbn %].01.LZZZZZZZ.jpg" alt="Cover image for [% d.title %]" />
+                            <img [% IF size_limit %]style="max-height:[% size_limit %]px;"[% END %] src="https://images-na.ssl-images-amazon.com/images/P/[% d.isbn %].01.LZZZZZZZ.jpg" alt="Cover image for [% d.title %] by [% d.author %]" />
                         [% END %]
                         <br/>
                         <a [% IF title_limit %]style="max-width:[% title_limit %]px;display:inline-block;"[% END %] href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% d.biblionumber %]">[% d.title %]</a>
@@ -33,14 +33,14 @@
                 <li>
                     [% IF (coverlinks) %]
                         <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% d.biblionumber %]">
-                            <img [% IF size_limit %]style="max-height:[% size_limit %]px;"[% END %] src="[% no_image %]" alt="No cover image available for [% d.title %]" />
+                            <img [% IF size_limit %]style="max-height:[% size_limit %]px;"[% END %] src="[% no_image %]" alt="No cover image available for [% d.title %] by [% d.author %]" />
                         </a>
                         [% IF showtitle %]
                             <br/>
                             <p [% IF title_limit %]style="max-width:[% title_limit %]px;display:inline-block;"[% END %]>[% d.title %]</p>
                         [% END %]
                     [% ELSE %]
-                        <img [% IF size_limit %]style="max-height:[% size_limit %]px;"[% END %] src="[% no_image %]" alt="No cover image available for [% d.title %]" />
+                        <img [% IF size_limit %]style="max-height:[% size_limit %]px;"[% END %] src="[% no_image %]" alt="No cover image available for [% d.title %] by [% d.author %]" />
                         <br/>
                         <a [% IF title_limit %]style="max-width:[% title_limit %]px;display:inline-block;"[% END %] href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% d.biblionumber %]">[% d.title %]</a>
                     [% END %]
