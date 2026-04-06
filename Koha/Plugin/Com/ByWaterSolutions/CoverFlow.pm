@@ -50,8 +50,8 @@ our $metadata = {
     author          => 'Kyle M Hall',
     description     => 'Convert a report into a coverflow style widget!',
     date_authored   => '2014-06-29',
-    date_updated    => '1900-01-01',
-    minimum_version => '19.05',
+    date_updated    => '2026-04-06',
+    minimum_version => '25.05',
     maximum_version => undef,
     version         => $VERSION,
 };
