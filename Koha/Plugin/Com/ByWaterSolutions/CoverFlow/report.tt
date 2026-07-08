@@ -1,3 +1,4 @@
+[% USE Remove_MARC_punctuation %]
 <div class="koha-coverflow" [% IF (use_coce) %]style="min-height: 200px"[% END %]>
     <ul>
         [% FOREACH d IN data %]
@@ -32,7 +33,7 @@
                         [% IF showtitle %]
                             <br/>
                             <p [% IF title_limit %]style="max-width:[% title_limit | html %]px;display:inline-block;"[% END %]>
-                                [% d.title | html %]
+                                [% d.title | $Remove_MARC_punctuation | html %]
                             </p>
                         [% END %]
 
@@ -57,7 +58,7 @@
                         <br/>
                         <a [% IF title_limit %]style="max-width:[% title_limit | html %]px;display:inline-block;"[% END %]
                            href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% d.biblionumber | html %]">
-                            [% d.title | html %]
+                            [% d.title | $Remove_MARC_punctuation | html %]
                         </a>
 
                     [% END %]
@@ -74,7 +75,7 @@
                         [% IF showtitle %]
                             <br/>
                             <p [% IF title_limit %]style="max-width:[% title_limit | html %]px;display:inline-block;"[% END %]>
-                                [% d.title | html %]
+                                [% d.title | $Remove_MARC_punctuation | html %]
                             </p>
                         [% END %]
                     [% ELSE %]
@@ -84,7 +85,7 @@
                         <br/>
                         <a [% IF title_limit %]style="max-width:[% title_limit | html %]px;display:inline-block;"[% END %]
                            href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% d.biblionumber | html %]">
-                            [% d.title | html %]
+                            [% d.title | $Remove_MARC_punctuation | html %]
                         </a>
                     [% END %]
 

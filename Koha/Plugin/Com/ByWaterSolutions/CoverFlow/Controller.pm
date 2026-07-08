@@ -61,7 +61,10 @@ sub get {
         my $no_image = $plugin->retrieve_data('custom_image')
         || "https://raw.githubusercontent.com/bywatersolutions/web-assets/master/NoImage.png";
 
-        my $template = Template->new({INCLUDE_PATH => join(':',@INC)});
+        my $template = Template->new({
+            INCLUDE_PATH => join(':', @INC),
+            PLUGIN_BASE  => 'Koha::Template::Plugin',
+        });
         my $content;
         my $params = {
             data        => $data,
