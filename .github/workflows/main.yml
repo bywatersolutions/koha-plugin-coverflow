@@ -186,3 +186,19 @@ jobs:
           CHANGELOG.md
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  keepalive:
+    name: Keep Alive
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Check age and push commit if needed
+      run: |
+        LAST_COMMIT=$( git --no-pager log -1 --format=%ct )
+        NOW=$(date +%s)
+        DIFF=$(($NOW-$LAST_COMMIT))
+        DAYS=$(($DIFF/86400))
+        git config --global user.email kyle@bywatersolutions.com
+        git config --global user.name "Kyle M Hall"
+        git commit --allow-empty -m "Automated commit from keep alive workflow"
+        if [ "$DAYS" -gt "50" ]; then git push; fi
