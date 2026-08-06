@@ -73,6 +73,8 @@ sub get {
             size_limit  => $plugin->retrieve_data('size_limit'),
             title_limit => $plugin->retrieve_data('title_limit'),
             use_coce    => $plugin->retrieve_data('use_coce'),
+            use_syndetics           => $plugin->retrieve_data('use_syndetics') ? 1 : 0,
+            syndetics_client_code   => C4::Context->preference('SyndeticsClientCode') // q{},
             no_image    => $no_image,
             CoceHost    => C4::Context->preference('CoceHost'),
             CoceProviders => C4::Context->preference('CoceProviders'),

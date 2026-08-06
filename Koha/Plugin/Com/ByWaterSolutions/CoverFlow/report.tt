@@ -6,9 +6,32 @@
             [% cover_label = "Cover image for ${d.title}${author_text}" %]
             [% no_cover_label = "No cover image available for ${d.title}${author_text}" %]
             [% link_label = d.author ? "${d.title} by ${d.author}" : d.title %]
+            [% syndetics_url = "" %]
+
+            [% IF use_syndetics && syndetics_client_code && (d.isbn || d.upc || d.oclc) %]
+
+            [% syndetics_url = "https://secure.syndetics.com/index.aspx?isbn=" %]
+
+            [% IF d.isbn %]
+                [% syndetics_url = syndetics_url _ d.isbn _ "/MC.GIF" %]
+            [% ELSE %]
+                [% syndetics_url = syndetics_url _ "/MC.GIF" %]
+            [% END %]
+
+            [% syndetics_url = syndetics_url _ "&client=" _ syndetics_client_code %]
+            [% syndetics_url = syndetics_url _ "&type=xw10" %]
+
+            [% IF d.upc %]
+                [% syndetics_url = syndetics_url _ "&upc=" _ d.upc %]
+            [% END %]
+
+            [% IF d.oclc %]
+                [% syndetics_url = syndetics_url _ "&oclc=" _ d.oclc %]
+            [% END %]
+        [% END %]
 
             <li>
-                [% IF d.isbn || d.localcover %]
+            [% IF d.isbn || d.upc || d.oclc || d.localcover %]
 
                     [% IF (coverlinks) %]
                         <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% d.biblionumber | html %]"
@@ -17,13 +40,26 @@
                                 <img [% IF size_limit %]style="max-height:[% size_limit | html %]px;"[% END %]
                                      src="/cgi-bin/koha/opac-image.pl?biblionumber=[% d.biblionumber | html %]"
                                      alt="" />
-                            [% ELSIF (use_coce) %]
-                                <div style="block"
+
+                            [% ELSIF use_syndetics && syndetics_url %]
+
+                                <img [% IF size_limit %] style="max-height:[% size_limit | html %]px;" [% END %] src="[% syndetics_url | html %]"
+                                alt="" />
+
+                            [% ELSIF use_coce && d.isbn %]
+                                <div style="display:block"
                                      title="[% d.biblionumber | html %]"
                                      class="[% d.isbn | html %]"
                                      id="coce-thumbnail-preview"
                                      role="img"
                                      aria-label="[% cover_label | html %]"></div>
+
+                            [% ELSIF d.isbn %]
+
+                                <img [% IF size_limit %] style="max-height:[% size_limit | html %]px;" [% END %]
+                                src="https://images-na.ssl-images-amazon.com/images/P/[% d.isbn | uri %].01.LZZZZZZZ.jpg"
+                                alt="" />
+
                             [% ELSE %]
                                 <img [% IF size_limit %]style="max-height:[% size_limit | html %]px;"[% END %]
                                      src="https://images-na.ssl-images-amazon.com/images/P/[% d.isbn | html %].01.LZZZZZZZ.jpg"
@@ -43,13 +79,28 @@
                             <img [% IF size_limit %]style="max-height:[% size_limit | html %]px;"[% END %]
                                  src="/cgi-bin/koha/opac-image.pl?biblionumber=[% d.biblionumber | html %]"
                                  alt="[% cover_label | html %]" />
-                        [% ELSIF (use_coce) %]
+
+                        [% ELSIF use_syndetics && syndetics_url %]
+
+                            <img [% IF size_limit %] style="max-height:[% size_limit | html %]px;" 
+                        [% END %]
+                        src="[% syndetics_url | html %]"
+                        alt="" />
+
+                        [% ELSIF use_coce && d.isbn %]
                             <div style="block"
                                  title="[% d.biblionumber | html %]"
                                  class="[% d.isbn | html %]"
                                  id="coce-thumbnail-preview"
                                  role="img"
                                  aria-label="[% cover_label | html %]"></div>
+
+                        [% ELSIF d.isbn %]
+                            <img [% IF size_limit %] style="max-height:[% size_limit | html %]px;" 
+                        [% END %]
+                        src="https://images-na.ssl-images-amazon.com/images/P/[% d.isbn | uri %].01.LZZZZZZZ.jpg"
+                        alt="" />
+
                         [% ELSE %]
                             <img [% IF size_limit %]style="max-height:[% size_limit | html %]px;"[% END %]
                                  src="https://images-na.ssl-images-amazon.com/images/P/[% d.isbn | html %].01.LZZZZZZZ.jpg"
@@ -93,6 +144,7 @@
             </li>
         [% END %]
     </ul>
+
 
 [% IF (use_coce) %]
 <script type="text/javascript" src="/opac-tmpl/bootstrap/js/coce.js"></script>

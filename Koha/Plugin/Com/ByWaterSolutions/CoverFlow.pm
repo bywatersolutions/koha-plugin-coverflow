@@ -42,7 +42,7 @@ use Koha::DateUtils qw(dt_from_string);
 
 
 ## Here we set our plugin version
-our $VERSION = "{VERSION}";
+our $VERSION = "2.6.6";
 
 ## Here is our metadata, some keys are required, some are optional
 our $metadata = {
@@ -50,7 +50,7 @@ our $metadata = {
     author          => 'Kyle M Hall',
     description     => 'Convert a report into a coverflow style widget!',
     date_authored   => '2014-06-29',
-    date_updated    => '2026-04-06',
+    date_updated    => '2026-08-06',
     minimum_version => '25.05',
     maximum_version => undef,
     version         => $VERSION,
@@ -88,6 +88,12 @@ sub run_report {
     my $data = from_json($json);
     my $no_image = $self->retrieve_data('custom_image') || "https://raw.githubusercontent.com/bywatersolutions/web-assets/master/NoImage.png";
 
+    my $use_syndetics = $self->retrieve_data('use_syndetics') ? 1 : 0;
+
+    my $syndetics_client_code =
+        C4::Context->preference('SyndeticsClientCode')
+    || q{};
+
     $template->param(
             'data'      => $data,
             coverlinks  => $self->retrieve_data('coverlinks'),
@@ -95,6 +101,8 @@ sub run_report {
             size_limit  => $self->retrieve_data('size_limit'),
             title_limit => $self->retrieve_data('title_limit'),
             use_coce    => $self->retrieve_data('use_coce'),
+            use_syndetics => $use_syndetics,
+            syndetics_client_code => $syndetics_client_code,
             no_image    => $no_image,
             );
 
@@ -128,6 +136,8 @@ sub configure {
                 size_limit => $self->retrieve_data('size_limit'),
                 title_limit => $self->retrieve_data('title_limit'),
                 use_coce => $self->retrieve_data('use_coce'),
+                use_syndetics          => $self->retrieve_data('use_syndetics'),
+                syndetics_client_code  => C4::Context->preference('SyndeticsClientCode'),
                 );
 
 
@@ -143,6 +153,7 @@ sub configure {
     else {
         my $coverlinks = $cgi->param('coverlinks') ? 1:0;
         my $use_coce = $cgi->param('use_coce') ? 1:0;
+        my $use_syndetics = $cgi->param('use_syndetics') ? 1 : 0;
         my $showtitle = $cgi->param('showtitle') ? 1:0;
         my $custom_image = $cgi->param('custom_image') // "";
 
@@ -187,7 +198,8 @@ sub configure {
                 size_limit         => $cgi->param('size_limit') // undef,
                 title_limit        => $cgi->param('title_limit') // undef,
                 last_configured_by => C4::Context->userenv->{'number'},
-                use_coce => $use_coce
+                use_coce => $use_coce,
+                use_syndetics      => $use_syndetics,
             }
         );
         $self->go_home();
@@ -302,7 +314,22 @@ sub get_report {
         if ($sth) {
             my $lines;
             $lines = $sth->fetchall_arrayref( {} );
-            map { $_->{isbn} = GetNormalizedISBN( $_->{isbn} ) } @$lines;
+            foreach my $line ( @{$lines} ) {
+                $line->{isbn} = GetNormalizedISBN( $line->{isbn} )
+                    if defined $line->{isbn} && $line->{isbn} ne q{};
+
+                $line->{upc} = q{}
+                    unless defined $line->{upc};
+
+                $line->{oclc} = q{}
+                    unless defined $line->{oclc};
+
+                # Syndetics expects the numeric OCLC identifier without a prefix.
+                    $line->{oclc} =~ s/^\s*\(OCoLC\)\s*//i;
+                    $line->{oclc} =~ s/^\s*oc[mn]?\s*//i;
+                    $line->{oclc} =~ s/\D//g;
+                }
+
             $json_text = to_json($lines);
 
 #            if ($cache_active) {

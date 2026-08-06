@@ -1,15 +1,36 @@
 $(document).ready(function () {
     [% FOREACH m IN mapping %]
-        [% IF m.sql_params.size > 0 %]
+    [% IF m.sql_params && m.sql_params.size %]
             $('[% m.selector %]').load("/api/v1/contrib/coverflow/reports/[% m.id | uri %]?[% m.sql_params.join('&') %]", function () {
         [% ELSE %]
             $('[% m.selector %]').load("/api/v1/contrib/coverflow/reports/[% m.id | uri %]", function () {
         [% END %]
-                $('.koha-coverflow img').on("load", function(){
-                if ( this.naturalHeight == 1 ) {
-                    $(this).attr("src", [% IF (custom_image) %]"[% custom_image %]")[% ELSE %]"https://raw.githubusercontent.com/bywatersolutions/web-assets/master/NoImage.png")[% END%];
-                                    }
-                });
+            $('.koha-coverflow img')
+                .on("load", function () {
+                        if (this.naturalHeight <= 1 || this.naturalWidth <= 1) {
+                $(this).attr(
+                        "src",
+                        [% IF custom_image %]
+                            "[% custom_image | html %]"
+                        [% ELSE %]
+                            "https://raw.githubusercontent.com/bywatersolutions/web-assets/master/NoImage.png"
+                        [% END %]
+                    );
+                }
+            })
+                .on("error", function () {
+                        $(this)
+                            .off("error")
+                            .attr(
+                                    "src",
+                            [% IF custom_image %]
+                                "[% custom_image | html %]"
+                            [% ELSE %]
+                                "https://raw.githubusercontent.com/bywatersolutions/web-assets/master/NoImage.png"
+                            [% END %]
+                        );
+                    });
+
             var opt = {
                 'items': '.item',
                 'minfactor': 15, // how much is the next item smaller than previous in pixels

@@ -4,18 +4,28 @@
  <title>Koha: Cover Flow Plugin: Configuration</title>
 [% INCLUDE 'doc-head-close.inc' %]
 
-<script type="text/javascript">
-$(document).ready(function() {
-    $("#coverlinks").change(function() {
-            if ( $(this).prop("checked") ){
-               $("#showtitle").prop("disabled",false);
-            }
-            else {
-                $("#showtitle").prop("disabled",true);
-            }
+
+<script>
+$(document).ready(function () {
+    $("#coverlinks").change(function () {
+        $("#showtitle").prop(
+            "disabled",
+            !$(this).prop("checked")
+        );
+    });
+
+    $("#use_coce").on("change", function () {
+        if ($(this).prop("checked")) {
+            $("#use_syndetics").prop("checked", false);
+        }
+    });
+
+    $("#use_syndetics").on("change", function () {
+        if ($(this).prop("checked")) {
+            $("#use_coce").prop("checked", false);
+        }
     });
 });
-
 </script>
 
 [% Asset.js( "lib/codemirror/codemirror.min.js" ) | $raw %]
@@ -59,6 +69,16 @@ $(document).ready(function() {
             <input type="checkbox" id="use_coce" name="use_coce" [% IF (use_coce) %]checked="checked"[% END %] value="1"></input>
             </br>
             <p>Note you must define the url for the Coce service and select service providers in the system preferences if you choose this, you do not need to enable coce images for the catalog</p>
+
+            </br>
+            <label for="use_syndetics">Use Syndetics for cover images</label>
+            <input type="checkbox" id="use_syndetics" name="use_syndetics" value="1" [% IF use_syndetics %]checked="checked"[% END %] />
+
+            <p>Uses the Koha SyndeticsClientCode system preference. Reports may include columns named <code>isbn</code>, <code>upc</code>, and <code>oclc</code>.</p>
+
+            [% IF use_syndetics && !syndetics_client_code %]
+                <div class="alert alert-warning">Syndetics is enabled for CoverFlow, but the SyndeticsClientCode system preference is empty.</div>
+                [% END %]
 
             </br>
             <label for="size_limit">Limit image size (height in pixels)</label>
