@@ -1,4 +1,5 @@
 name: CI
+
 on:
   push:
     branches:
@@ -8,6 +9,14 @@ on:
   workflow_dispatch:
   schedule:
     - cron: "0 6 * * *"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ !startsWith(github.ref, 'refs/tags/') }}
+
 jobs:
   unit_tests:
     name: Run unit tests
@@ -23,7 +32,7 @@ jobs:
 
     - name: Get Koha Version Branch Name
       id: koha-version
-      uses: "bywatersolutions/github-action-koha-get-version-by-label@master"
+      uses: "bywatersolutions/github-action-koha-get-version-by-label@v2"
       with:
         version-label: "${{ matrix.koha-version }}"
 
@@ -61,28 +70,26 @@ jobs:
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/v')
     needs: unit_tests
-    strategy:
-      fail-fast: false
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v4
 
     - name: Parse out and store the GitHub repository name
       id: myvars
       run: |
         IFS='/' read -r -a parts <<< "$GITHUB_REPOSITORY"
         GITHUB_REPO="${parts[1]}"
-        echo ::set-output name=github_repo::$GITHUB_REPO
+        echo "github_repo=$GITHUB_REPO" >> "$GITHUB_OUTPUT"
         echo "GITHUB REPO: $GITHUB_REPO"
 
         TAG_VERSION="${GITHUB_REF##*/}"
         echo "TAG VERSION: $TAG_VERSION"
         TAG_VERSION="${TAG_VERSION:1}"
         echo "TAG VERSION 2: $TAG_VERSION"
-        echo ::set-output name=tag_version::$TAG_VERSION
+        echo "tag_version=$TAG_VERSION" >> "$GITHUB_OUTPUT"
 
     - name: Get Koha Version Branch Name
       id: koha-version-oldstable
-      uses: "bywatersolutions/github-action-koha-get-version-by-label@master"
+      uses: "bywatersolutions/github-action-koha-get-version-by-label@v2"
       with:
         version-label: "oldstable"
 
@@ -97,7 +104,7 @@ jobs:
 
     - name: Build Koha Plugin kpz artifact
       id: kpz
-      uses: "bywatersolutions/github-action-koha-plugin-create-kpz@master"
+      uses: "bywatersolutions/github-action-koha-plugin-create-kpz@v3"
       with:
         release-version: ${{ steps.myvars.outputs.tag_version }}
         release-name: ${{ steps.myvars.outputs.github_repo }}
@@ -110,27 +117,28 @@ jobs:
         ls -alh
 
     - name: Release
-      uses: softprops/action-gh-release@v1
+      uses: softprops/action-gh-release@v2
       if: startsWith(github.ref, 'refs/tags/')
       with:
         files: |
           ${{ steps.kpz.outputs.filename }}
           CHANGELOG.md
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   keepalive:
     name: Keep Alive
     runs-on: ubuntu-latest
+    if: github.event_name == 'schedule'
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Check age and push commit if needed
       run: |
         LAST_COMMIT=$( git --no-pager log -1 --format=%ct )
         NOW=$(date +%s)
         DIFF=$(($NOW-$LAST_COMMIT))
         DAYS=$(($DIFF/86400))
-        git config --global user.email kyle@bywatersolutions.com
-        git config --global user.name "Kyle M Hall"
-        git commit --allow-empty -m "Automated commit from keep alive workflow"
-        if [ "$DAYS" -gt "50" ]; then git push; fi
+        if [ "$DAYS" -gt "50" ]; then
+          git config --global user.email kyle@bywatersolutions.com
+          git config --global user.name "Kyle M Hall"
+          git commit --allow-empty -m "Automated commit from keep alive workflow"
+          git push
+        fi
