@@ -1,17 +1,11 @@
 name: CI
-
 on:
   push:
+  pull_request:
     branches:
       - main
-    tags:
-      - 'v*.*.*'
-  workflow_dispatch:
   schedule:
-    - cron: "0 6 * * *"
-
-permissions:
-  contents: write
+    - cron: "0 6 1,15 * *"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
